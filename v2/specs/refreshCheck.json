@@ -1,0 +1,135 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "Allows customers to check if the D-U-N-S Number of a given product has been updated after a specified date.",
+		"title": "Refresh Check Data",
+		"version": "1"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v1/data/refreshCheck/{dunsNumber}": {
+			"x-DNB-Name": "Refresh Check",
+			"x-DNB-ID": "refreshCheck",
+			"get": {
+				"description": "Allows customers to check if the D-U-N-S Number of a given product has been updated after a specified date.",
+				"summary": "Endpoint",
+				"operationId": "refreshCheck",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"tags": [
+					"refreshCheck"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"200": {
+						"description": "valid refreshCheck return",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"example": "",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										}
+									}
+								},
+								"inquiryDetail": {
+									"type": "object",
+									"example": "",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"duns": {
+											"type": "string",
+											"example": "804735132",
+											"description": "The D-U-N-S number provided in the request."
+										},
+										"productId": {
+											"type": "string",
+											"example": "PRODID",
+											"description": "The ID of the product used to produce the response."
+										},
+										"productVersion": {
+											"type": "string",
+											"example": "v1",
+											"description": "The product version number provided in the request."
+										},
+										"referenceDate": {
+											"type": "string",
+											"example": "2017-05-06",
+											"description": "The date provided in the request."
+										}
+									}
+								},
+								"hasRefreshedData": {
+									"type": "boolean",
+									"example": true,
+									"description": "Indicates whether there is an update for the entity within the specified product after the reference date.<br/><br/>- If true, the entity has been updated.<br/>- If false, the entity has not been updated."
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					},
+					{
+						"in": "path",
+						"name": "dunsNumber",
+						"description": "A 9-character numeric string identifying the entity by its Dun & Bradstreet D-U-N-S number.",
+						"required": true,
+						"type": "string",
+						"x-example": "804735132"
+					},
+					{
+						"in": "query",
+						"name": "productId",
+						"description": "The product ID provided by Dun & Bradstreet that identifies the product to be returned.",
+						"required": true,
+						"type": "string",
+						"x-example": "prodid"
+					},
+					{
+						"in": "query",
+						"name": "versionId",
+						"description": "The version of the product to be returned.",
+						"required": true,
+						"type": "string",
+						"x-example": "v1"
+					},
+					{
+						"in": "query",
+						"name": "referenceDate",
+						"description": "The date to use when checking if the D-U-N-S Number has been updated.  If the D-U-N-S Number has been updated after this date, a value of true will be returned.<br/><br/>Format: YYYY-MM-DD",
+						"required": true,
+						"type": "string",
+						"x-example": "2017-11-21"
+					}
+				]
+			}
+		}
+	}
+}

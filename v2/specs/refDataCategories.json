@@ -1,0 +1,100 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "Provides information about dnb codes",
+		"title": "Reference Data",
+		"version": "1"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v1/referenceData/categories": {
+			"x-DNB-Name": "Reference Data: get all categories",
+			"x-DNB-ID": "refdataCategories",
+			"get": {
+				"description": "Returns all reference data IDs and descriptions.",
+				"summary": "Endpoint",
+				"operationId": "refdata",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"tags": [
+					"refdataCategories"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"200": {
+						"description": "valid get all categories response",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										},
+										"inLanguage": {
+											"type": "string",
+											"example": "en-US",
+											"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+										},
+										"serviceVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The product version number provided in the request."
+										}
+									}
+								},
+								"codeTables": {
+									"type": "array",
+									"description": "The details of the Dun & Bradstreet Reference data sets requested.",
+									"items": {
+										"properties": {
+											"categoryName": {
+												"type": "string",
+												"example": "Currency",
+												"description": "The name of the logical group of Dun & Bradstreet assigned code values that represent a specific type of information."
+											},
+											"categoryID": {
+												"type": "integer",
+												"example": 1,
+												"description": "A unique code assigned by Dun & Bradstreet to identify the Category."
+											}
+										},
+										"example": "",
+										"type": "object"
+									}
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					}
+				]
+			}
+		}
+	}
+}

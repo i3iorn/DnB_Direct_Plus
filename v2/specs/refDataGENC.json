@@ -1,0 +1,132 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "Provides information about ISO To GENC.",
+		"title": "Reference Data",
+		"version": "1"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v1/referenceData/categories/country": {
+			"x-DNB-Name": "Reference Data: get ISO To GENC",
+			"x-DNB-ID": "refdataGENC",
+			"get": {
+				"description": "Returns information about ISO To GENC.",
+				"summary": "Endpoint",
+				"operationId": "refdataGENC",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"tags": [
+					"refdataGENC"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										},
+										"inLanguage": {
+											"type": "string",
+											"example": "en-US",
+											"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+										},
+										"serviceVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The product version number provided in the request."
+										}
+									}
+								},
+								"inquiryDetail": {
+									"type": "object",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"isoAlpha2Code": {
+											"type": "string",
+											"example": "US",
+											"description": "An identifier assigned to the logical group of D&B assigned code values that represent a specific type of information."
+										}
+									},
+									"additionalProperties": true
+								},
+								"countryReference": {
+									"type": "object",
+									"description": "Records the details of the country requested.",
+									"properties": {
+										"isoAlpha2Code": {
+											"type": "string",
+											"example": "US",
+											"description": "The 2-letter country code, defined by the International Organization for Standardization (ISO) ISO 3166-1 scheme identifying the country of the subject."
+										},
+										"gencAlpha2Code": {
+											"type": "string",
+											"example": "US",
+											"description": "The 2 letter code for the geopolitical entity chosen by GENC."
+										},
+										"gencAlpha3Code": {
+											"type": "string",
+											"example": "USA",
+											"description": "The 3 letter code for the geopolitical entity chosen by GENC."
+										},
+										"gencNumeric3Code": {
+											"type": "string",
+											"example": "840",
+											"description": "The 3 digit code for the geopolitical entity chosen by GENC."
+										},
+										"gencName": {
+											"type": "string",
+											"example": "UNITED STATES",
+											"description": "The preferred term of the geopolitical entity chosen by GENC."
+										}
+									},
+									"additionalProperties": true
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					},
+					{
+						"in": "query",
+						"name": "isoAlpha2Code",
+						"description": "The 2-letter country code, defined by the International Organization for Standardization (ISO) ISO 3166-1 scheme identifying the country of the subject.",
+						"required": true,
+						"type": "string",
+						"x-example": "US"
+					}
+				]
+			}
+		}
+	}
+}

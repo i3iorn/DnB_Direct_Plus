@@ -1,0 +1,215 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "To view active entitlements (products, levels etc..) and subscriber details.",
+		"title": "Entitlement",
+		"version": "1"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v1/entitlements": {
+			"x-DNB-Name": "Entitlement",
+			"x-DNB-ID": "entitlements",
+			"get": {
+				"description": "To view active entitlements (products, levels etc..) and subscriber details.",
+				"summary": "",
+				"operationId": "entitlements",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"tags": [
+					"entitlements"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"customerTransactionID": {
+											"type": "string",
+											"example": "1234",
+											"description": "The customerTransactionID provided in the request"
+										},
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										},
+										"inLanguage": {
+											"type": "string",
+											"example": "en-US",
+											"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+										},
+										"serviceVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The product version number provided in the request."
+										}
+									},
+									"additionalProperties": true
+								},
+								"inquiryDetail": {
+									"type": "object",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"customerReference": {
+											"type": "string",
+											"example": "Some text to describe the request.",
+											"description": "A reference string provided by the customer for this particular transaction."
+										}
+									},
+									"additionalProperties": true
+								},
+								"subscriber": {
+									"type": "object",
+									"description": "Records data about the subscriber.",
+									"properties": {
+										"subscriberNumber": {
+											"type": "string",
+											"example": "123456789",
+											"description": "A unique number assigned to the subscriber."
+										},
+										"countryISOAlpha2Code": {
+											"type": "string",
+											"example": "US",
+											"description": "ISO Alpha2 Country/Market code of the subscriber."
+										},
+										"subscriberType": {
+											"type": "string",
+											"example": "Internal",
+											"description": "The type of the subscriber.<br/><br/>Valid Values:<br/>* Internal<br/>* External"
+										}
+									},
+									"additionalProperties": true
+								},
+								"product": {
+									"type": "object",
+									"description": "Records data about the product subscribed.",
+									"properties": {
+										"productName": {
+											"type": "string",
+											"example": "D&B for Finance",
+											"description": "Name of the product subscribed."
+										},
+										"package": {
+											"type": "string",
+											"example": "Domain Use",
+											"description": "Package name of the product subscribed."
+										},
+										"contractType": {
+											"type": "string",
+											"example": "Trial",
+											"description": "The type of the contract.<br/><br/>Valid Values:<br/>* Trial<br/>* Paid<br/>* Paid Service<br/>* Free Trial<br/>* Paid Trial<br/>* Paid POC<br/>* Free POC<br/>* Trial POC"
+										},
+										"status": {
+											"type": "string",
+											"example": "Active",
+											"description": "Status of the product subscribed.<br/><br/>Valid Values:<br/>* Active<br/>* InActive<br/>* Expired<br/>* Hold<br/>* Cancelled<br/>* Future"
+										},
+										"expirationDate": {
+											"type": "string",
+											"example": "2022-12-31",
+											"description": "Expiry date of the subscription."
+										}
+									},
+									"additionalProperties": true
+								},
+								"apiKey": {
+									"type": "object",
+									"description": "Records data about the api Key.",
+									"properties": {
+										"keyType": {
+											"type": "string",
+											"example": "Production",
+											"description": "The type of the API Key.<br/><br/>Valid Values:<br/>* Production<br/>* Development"
+										}
+									},
+									"additionalProperties": true
+								},
+								"entitlements": {
+									"type": "array",
+									"description": "Records data of the product or feature or block(s) entitled.",
+									"items": {
+										"properties": {
+											"name": {
+												"type": "string",
+												"example": "Company Information",
+												"description": "The name of the product or feature or block(s) entitled."
+											},
+											"entitlementID": {
+												"type": "string",
+												"example": "companyinfo",
+												"description": "Identifier of the product or feature or block(s) entitled."
+											},
+											"levels": {
+												"type": "array",
+												"description": "Levels of the product or feature or block(s) entitled.",
+												"items": {
+													"example": [
+														"L1"
+													],
+													"type": "string"
+												}
+											},
+											"isMonitorable": {
+												"type": "boolean",
+												"example": true,
+												"description": "When set to true, it indicates that monioring for the given product or feature or block(s) is entitled.<br/>When set to false, it indicates that monioring for the given product or feature or block(s) is not entitled."
+											}
+										},
+										"additionalProperties": true,
+										"type": "object"
+									}
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "customerTransactionID",
+						"description": "Up to 256 characters. A number or text string provided by the requester identifying how this particular transaction is known in their system.",
+						"required": false,
+						"type": "string",
+						"x-example": "id123456"
+					},
+					{
+						"in": "query",
+						"name": "customerReference",
+						"description": "Up to 240 characters for a reference string to be linked to the request in order to support subsequent order reconciliation.",
+						"required": false,
+						"type": "string",
+						"x-example": "customer reference text"
+					},
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					}
+				]
+			}
+		}
+	}
+}

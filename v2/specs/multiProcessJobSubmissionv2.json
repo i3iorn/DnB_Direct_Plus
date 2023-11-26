@@ -1,0 +1,470 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "MultiProcess",
+		"title": "MultiProcess",
+		"version": "2"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v2/multiprocess/jobSubmission": {
+			"x-DNB-Name": "Multi-Process: Submit",
+			"x-DNB-ID": "multiProcessJobSubmissionv2",
+			"get": {
+				"description": "Multi-Process Company Entity Resolution identifies the most likely match for the given criteria. The response content for each record, if a match is found, is same as for transactional Company Entity Resolution API.\r\n\r\nData Coverage: Global\r\nNote: This API is available as part of \"Company Entity Resolution\" Non Standard Data Blocks.",
+				"summary": "GET Method",
+				"operationId": "MultiProcessJobSubmissionGet",
+				"tags": [
+					"MultiProcessJobSubmissionGet"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"202": {
+						"description": "ACCEPTED",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										}
+									},
+									"additionalProperties": true
+								},
+								"information": {
+									"type": "object",
+									"description": "The details of the request.",
+									"properties": {
+										"code": {
+											"type": "string",
+											"example": "99999",
+											"description": "A unique code assigned by Dun & Bradstreet to identify the status of this request. See the Error and Information Code list for more information."
+										},
+										"message": {
+											"type": "string",
+											"example": "A message appropriate to the request outcome.",
+											"description": "The description assigned to the information code."
+										},
+										"url": {
+											"type": "string",
+											"example": "https://someurl.com",
+											"description": "The URL used to invoke the URI."
+										},
+										"method": {
+											"type": "string",
+											"example": "GET",
+											"description": "The REST method to be used."
+										}
+									},
+									"additionalProperties": true
+								},
+								"requestDetail": {
+									"type": "object",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"processId": {
+											"type": "string",
+											"example": "match",
+											"description": "The process ID included in the request."
+										},
+										"processVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The process version included in the request."
+										},
+										"blockIDs": {
+											"type": "array",
+											"description": "The blockIDs provided in the request.",
+											"items": {
+												"example": [
+													"blockID"
+												],
+												"type": "string"
+											}
+										},
+										"inputFileName": {
+											"type": "string",
+											"example": "myrequestfile",
+											"description": "The input file name included in the request."
+										},
+										"customerReference": {
+											"type": "string",
+											"example": "Some text to describe the request.",
+											"description": "A reference string provided by the customer for this particular transaction."
+										},
+										"productId": {
+											"type": "string",
+											"example": "cmpelk",
+											"description": "The product ID included in the request."
+										},
+										"versionId": {
+											"type": "string",
+											"example": "v1",
+											"description": "The product version included in the request."
+										}
+									},
+									"additionalProperties": true
+								},
+								"jobID": {
+									"type": "string",
+									"example": "some-alpha-numeric-id",
+									"description": "A unique identifier assigned by the Dun & Bradstreet application to identify this service request. The reference can be used to track the status of the process and retrieve the output when processed."
+								},
+								"jobSubmissionDetail": {
+									"type": "object",
+									"description": "The details of the data returned by Dun & Bradstreet when a request to process an input file was accepted by the invoked service. The details in this section are needed to perform subsequent steps to upload the input file.",
+									"properties": {
+										"contentURL": {
+											"type": "string",
+											"example": "the_exact_URL_to_be_used_in_upload_request",
+											"description": "The URL to be used to uploaded the file to be processed by Dun & Bradstreet. This is the pre-signed URL for the S3 folder dynamically assigned to each request. This URL includes security credentials, bucket name or object key, an HTTP method (PUT of uploading objects), and an expiration date and time. The URL is valid only for the specified duration."
+										},
+										"urlMethod": {
+											"type": "string",
+											"example": "PUT",
+											"description": "The HTTP method that should be used to upload input files to assigned S3 URL. HTTP method PUT is used for uploading objects."
+										},
+										"urlExpirationTimestamp": {
+											"type": "string",
+											"example": "2016-09-02T14:20:31.761Z",
+											"description": "The date and time, in ISO 8601 UTC Z standards, the URL will expire. File must be uploaded before this time."
+										}
+									},
+									"additionalProperties": true
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					},
+					{
+						"in": "header",
+						"name": "Customer-Key",
+						"description": "A unique key provided by the customer while submitting a job; this key will be used to calculate the signature of the S3 pre-signed-url. The customer should retain this key to access the S3 folder to upload the input file.",
+						"required": true,
+						"type": "string",
+						"x-example": "customer key"
+					},
+					{
+						"in": "query",
+						"name": "processId",
+						"description": "A unique identifier assigned by Dun & Bradstreet to identify the business function to be performed on the input. <br/><br/><br/><br/>Valid values:<br/><br/>* match<br/><br/>* extmatch<br/><br/>* hvmatch<br/><br/>* data",
+						"required": true,
+						"type": "string",
+						"x-example": "match"
+					},
+					{
+						"in": "query",
+						"name": "processVersion",
+						"description": "The version of the function to be used.",
+						"required": true,
+						"type": "string",
+						"x-example": "v1"
+					},
+					{
+						"in": "query",
+						"name": "inputFileName",
+						"description": "The name (up to 64 characters) of the file to be uploaded by the customer with input records to be processed. The file name will be used to allocate the S3 folder for this particular request and assign a presigned URL.<br/><br/><br/>Note: The file name can contain numbers, latin letters, underscores (_), hyphens (-), and periods (.).  No other characters are permissible.",
+						"required": true,
+						"type": "string",
+						"x-example": "filename"
+					},
+					{
+						"in": "query",
+						"name": "customerReference",
+						"description": "Up to 32 characters for a reference string to be linked to the request in order to support subsequent order reconciliation.",
+						"required": false,
+						"type": "string",
+						"x-example": "customer reference text"
+					},
+					{
+						"in": "query",
+						"name": "productId",
+						"description": "The product ID provided by Dun & Bradstreet that identifies the product to be returned.<br/><br/>Either productId & versionId or blockIDs must be specified.",
+						"required": true,
+						"type": "string",
+						"x-example": "prodid"
+					},
+					{
+						"in": "query",
+						"name": "versionId",
+						"description": "The version of the product to be returned.  <br/><br/>Either productId & versionId or blockIDs must be specified.",
+						"required": true,
+						"type": "string",
+						"x-example": "v2"
+					},
+					{
+						"in": "query",
+						"name": "blockIDs",
+						"description": "The block ID provided by Dun & Bradstreet that identifies the data block to be returned.<br/><br/>Multiple values can be included, separated by commas.<br/><br/>Either productId & versionId or blockIDs must be specified.",
+						"required": false,
+						"type": "string",
+						"x-example": "blockid"
+					}
+				]
+			},
+			"post": {
+				"description": "Multi-Process Company Entity Resolution identifies the most likely match for the given criteria. The response content for each record, if a match is found, is same as for transactional Company Entity Resolution API.\r\n\r\nData Coverage: Global\r\nNote: This API is available as part of \"Company Entity Resolution\" Non Standard Data Blocks.",
+				"summary": "POST Method",
+				"operationId": "MultiProcessJobSubmissionPost",
+				"tags": [
+					"MultiProcessJobSubmissionPost"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"202": {
+						"description": "ACCEPTED",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										}
+									},
+									"additionalProperties": true
+								},
+								"information": {
+									"type": "object",
+									"description": "The details of the request.",
+									"properties": {
+										"code": {
+											"type": "string",
+											"example": "99999",
+											"description": "A unique code assigned by Dun & Bradstreet to identify the status of this request. See the Error and Information Code list for more information."
+										},
+										"message": {
+											"type": "string",
+											"example": "A message appropriate to the request outcome.",
+											"description": "The description assigned to the information code."
+										},
+										"url": {
+											"type": "string",
+											"example": "https://someurl.com",
+											"description": "The URL used to invoke the URI."
+										},
+										"method": {
+											"type": "string",
+											"example": "GET",
+											"description": "The REST method to be used."
+										}
+									},
+									"additionalProperties": true
+								},
+								"requestDetail": {
+									"type": "object",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"processId": {
+											"type": "string",
+											"example": "match",
+											"description": "The process ID included in the request."
+										},
+										"processVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The process version included in the request."
+										},
+										"blockIDs": {
+											"type": "array",
+											"description": "The blockIDs provided in the request.",
+											"items": {
+												"example": [
+													"blockID"
+												],
+												"type": "string"
+											}
+										},
+										"inputFileName": {
+											"type": "string",
+											"example": "myrequestfile",
+											"description": "The input file name included in the request."
+										},
+										"customerReference": {
+											"type": "string",
+											"example": "Some text to describe the request.",
+											"description": "A reference string provided by the customer for this particular transaction."
+										},
+										"productId": {
+											"type": "string",
+											"example": "cmpelk",
+											"description": "The product ID included in the request."
+										},
+										"versionId": {
+											"type": "string",
+											"example": "v1",
+											"description": "The product version included in the request."
+										}
+									},
+									"additionalProperties": true
+								},
+								"jobID": {
+									"type": "string",
+									"example": "some-alpha-numeric-id",
+									"description": "A unique identifier assigned by the Dun & Bradstreet application to identify this service request. The reference can be used to track the status of the process and retrieve the output when processed."
+								},
+								"jobSubmissionDetail": {
+									"type": "object",
+									"description": "The details of the data returned by Dun & Bradstreet when a request to process an input file was accepted by the invoked service. The details in this section are needed to perform subsequent steps to upload the input file.",
+									"properties": {
+										"contentURL": {
+											"type": "string",
+											"example": "the_exact_URL_to_be_used_in_upload_request",
+											"description": "The URL to be used to uploaded the file to be processed by Dun & Bradstreet. This is the pre-signed URL for the S3 folder dynamically assigned to each request. This URL includes security credentials, bucket name or object key, an HTTP method (PUT of uploading objects), and an expiration date and time. The URL is valid only for the specified duration."
+										},
+										"urlMethod": {
+											"type": "string",
+											"example": "PUT",
+											"description": "The HTTP method that should be used to upload input files to assigned S3 URL. HTTP method PUT is used for uploading objects."
+										},
+										"urlExpirationTimestamp": {
+											"type": "string",
+											"example": "2016-09-02T14:20:31.761Z",
+											"description": "The date and time, in ISO 8601 UTC Z standards, the URL will expire. File must be uploaded before this time."
+										}
+									},
+									"additionalProperties": true
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					},
+					{
+						"in": "header",
+						"name": "Content-Type",
+						"description": "The content type must be &quot;application/json&quot;.",
+						"required": true,
+						"type": "string",
+						"x-example": "application/json"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "",
+						"required": true,
+						"schema": {
+							"required": [
+								"customerKey",
+								"processId",
+								"processVersion",
+								"inputFileName",
+								"productId",
+								"versionId"
+							],
+							"properties": {
+								"customerKey": {
+									"type": "string",
+									"example": "customer key",
+									"description": "A unique key (up to 64 characters) provided by the customer while submitting a job; this key will be used to calculate the signature of the S3 pre-signed-url. The customer should retain this key to access the S3 folder to upload the input file."
+								},
+								"processId": {
+									"type": "string",
+									"enum": [
+										"match",
+										"extmatch",
+										"refmatch",
+										"hvmatch"
+									],
+									"example": "match",
+									"description": "A unique identifier assigned by Dun & Bradstreet to identify the business function to be performed on the input. <br/><br/><br/><br/>Valid values:<br/><br/>* match<br/><br/>* extmatch<br/><br/>* hvmatch<br/><br/>* data"
+								},
+								"processVersion": {
+									"type": "string",
+									"example": "v1",
+									"description": "The version of the function to be used."
+								},
+								"inputFileName": {
+									"type": "string",
+									"example": "filename",
+									"description": "The name (up to 64 characters) of the file to be uploaded by the customer with input records to be processed. The file name will be used to allocate the S3 folder for this particular request and assign a presigned URL.<br/><br/><br/>Note: The file name can contain numbers, latin letters, underscores (_), hyphens (-), and periods (.).  No other characters are permissible."
+								},
+								"customerReference": {
+									"type": "string",
+									"example": "customer reference text",
+									"description": "Up to 32 characters for a reference string to be linked to the request in order to support subsequent order reconciliation."
+								},
+								"productId": {
+									"type": "string",
+									"example": "prodid",
+									"description": "The product ID provided by Dun & Bradstreet that identifies the product to be returned.<br/><br/>Either productId & versionId or blockIDs must be specified."
+								},
+								"versionId": {
+									"type": "string",
+									"example": "v2",
+									"description": "The version of the product to be returned.  <br/><br/>Either productId & versionId or blockIDs must be specified."
+								},
+								"blockIDs": {
+									"type": "string",
+									"example": "blockid",
+									"description": "The block ID provided by Dun & Bradstreet that identifies the data block to be returned.<br/><br/>Multiple values can be included, separated by commas.<br/><br/>Either productId & versionId or blockIDs must be specified."
+								},
+								"jobParameters": {
+									"type": "object",
+									"format": "json",
+									"example": "",
+									"description": "Includes file-level parameters to be applied to the job.",
+									"properties": {
+										"confidenceLowerLevelThresholdValue": {
+											"type": "integer",
+											"example": 7,
+											"description": "Limits the returned records to those with Confidence Level equal to or higher than specified value.<br/><br/>* If a value between 4 and 10 is specified, only matches with the specified value or higher are included.<br/>* If a value less than 4 is included OR the parameter is not included, 4 will be used.<br/>* If a value greater than 10 is included, 10 will be used.<br/><br/>Currently only applicable for High Volume Match; is ignored for all other processes even if included."
+										}
+									}
+								}
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

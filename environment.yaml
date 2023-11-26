@@ -1,0 +1,12 @@
+credentials:
+  personal:
+    test:
+      key: e91481c741fc495aa354f4609ae1cb5fd978d0963daf452494ca8af40d80493c
+      secret: b818c34325c94136a7c030bee90b395bcad70fce62654a679a4b96dff2ae3bdc
+  evolution_europe:
+    prod:
+      key: 05e1561668354f0fb6d01b018b82534574ce8f8325994d9dafb70c585602359b
+      secret: fdfc755772654e83b9302211d3b25dc7c3a9c49c80d44bfa82ee570f290c39c5
+    test:
+      key: fec56c06b837496aaa429722e9f4143864d0c17231f94f0eac686e04699f2d34
+      secret: fc0c5953c46341439e835a9ce9e08e131e5d6e79fe6e4abc86a97f92be812f79

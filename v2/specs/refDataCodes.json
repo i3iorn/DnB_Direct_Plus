@@ -1,0 +1,183 @@
+{
+	"swagger": "2.0",
+	"host": "plus.dnb.com",
+	"schemes": [
+		"https"
+	],
+	"info": {
+		"description": "Provides information about dnb codes",
+		"title": "Reference Data",
+		"version": "1"
+	},
+	"basePath": "/",
+	"paths": {
+		"/v1/referenceData/category": {
+			"x-DNB-Name": "Reference Data: get all codes for category",
+			"x-DNB-ID": "refdataCodes",
+			"get": {
+				"description": "Returns all item IDs and descriptions for a specified category.",
+				"summary": "Endpoint",
+				"operationId": "refdata",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"tags": [
+					"refdata"
+				],
+				"produces": [
+					"application/json;charset=utf-8"
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"schema": {
+							"properties": {
+								"transactionDetail": {
+									"type": "object",
+									"description": "The information used to process this request.",
+									"properties": {
+										"transactionID": {
+											"type": "string",
+											"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+											"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+										},
+										"transactionTimestamp": {
+											"type": "string",
+											"example": "2017-02-21T17:46:19.839Z",
+											"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+										},
+										"inLanguage": {
+											"type": "string",
+											"example": "en-US",
+											"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+										},
+										"serviceVersion": {
+											"type": "string",
+											"example": "1",
+											"description": "The product version number provided in the request."
+										}
+									}
+								},
+								"inquiryDetail": {
+									"type": "object",
+									"description": "The details of the input data provided.",
+									"properties": {
+										"name": {
+											"type": "string",
+											"example": "Company name",
+											"description": "The name provided in the request."
+										},
+										"id": {
+											"type": "integer",
+											"example": 1015,
+											"description": "The ID provided in the request."
+										},
+										"languageCode": {
+											"type": "integer",
+											"example": 39,
+											"description": "A unique code assigned by Dun&Bradstreet to denote the language specified by the user in which the descriptions should be returned in the response.<br/>Refer to Reference code table \"3 [ Language]\" for all possible values."
+										}
+									},
+									"additionalProperties": true
+								},
+								"codeTables": {
+									"type": "array",
+									"description": "The details of the Dun & Bradstreet Reference data sets requested.",
+									"items": {
+										"properties": {
+											"categoryName": {
+												"type": "string",
+												"example": "Currency",
+												"description": "The name of the logical group of Dun & Bradstreet assigned code values that represent a specific type of information."
+											},
+											"categoryID": {
+												"type": "integer",
+												"example": 1,
+												"description": "A unique code assigned by Dun & Bradstreet to identify the Category."
+											},
+											"codeLists": {
+												"type": "array",
+												"description": "The details of the values within the Category.",
+												"items": {
+													"properties": {
+														"code": {
+															"type": "string",
+															"example": "7978",
+															"description": "A unique code assigned by Dun & Bradstreet to identify the information."
+														},
+														"description": {
+															"type": "string",
+															"example": "Euro",
+															"description": "Description for the information."
+														},
+														"language": {
+															"type": "object",
+															"description": "Records the language in which this information is presented. This would be the requested language when available or defaulted to English when description in requested language is not available.",
+															"properties": {
+																"description": {
+																	"type": "string",
+																	"example": "English",
+																	"description": "Text which dneotes the language of this information."
+																},
+																"dnbCode": {
+																	"type": "integer",
+																	"example": 39,
+																	"description": "A unique code assigned by Dun&Bradstreet to identify the language of this information.<br/>Refer to Reference code table \"3 [ Language]\" for all possible values."
+																}
+															},
+															"additionalProperties": true
+														}
+													},
+													"additionalProperties": true,
+													"type": "object"
+												}
+											}
+										},
+										"additionalProperties": true,
+										"type": "object"
+									}
+								}
+							},
+							"description": "",
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Authorization",
+						"description": "The access token provided by authentication.",
+						"required": true,
+						"type": "string",
+						"x-example": "Bearer alphanumerictoken"
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"description": "The name of the logical group of Dun & Bradstreet assigned code values that represent a specific type of information.<br/><br/>Valid values: A valid category name. Category names can be obtained using the Reference Data Retrieve Categories API.<br/><br/>Either name or id must be specified.",
+						"required": false,
+						"type": "string",
+						"x-example": "Currency"
+					},
+					{
+						"in": "query",
+						"name": "languageCode",
+						"description": "The language in which the code descriptions should be returned.<br/><br/>Reference data catgeory 3 [Language]",
+						"required": false,
+						"type": "integer",
+						"x-example": 331
+					},
+					{
+						"in": "query",
+						"name": "id",
+						"description": "The ID of the logical group of Dun & Bradstreet assigned code values that represent a specific type of information.<br/><br/>Valid values: A valid category id. Category IDs can be obtained using the Reference Data Retrieve Categories API.<br/><br/>Either name or id must be specified.",
+						"required": false,
+						"type": "integer",
+						"x-example": 199
+					}
+				]
+			}
+		}
+	}
+}

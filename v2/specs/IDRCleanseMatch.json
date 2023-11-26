@@ -1,0 +1,2400 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Identity Resolution Cleanse Match",
+		"description": "Identity Resolution returns the best matches for given criteria using Dun & Bradstreet proprietary algorithms.\n\nData Coverage: Global\nNote: This API is available as part of \"Company Entity Resolution\" Non Standard Data Blocks.",
+		"version": "v1"
+	},
+	"servers": [
+		{
+			"url": "https://plus.dnb.com",
+			"description": "Production endpoint"
+		}
+	],
+	"paths": {
+		"/v1/match/cleanseMatch": {
+			"description": "Identity Resolution returns the best matches for given criteria using Dun & Bradstreet proprietary algorithms.\n\nData Coverage: Global\nNote: This API is available as part of \"Company Entity Resolution\" Non Standard Data Blocks.",
+			"x-DNB-ID": "IDRCleanseMatch",
+			"x-DNB-Name": "Identity Resolution Cleanse Match",
+			"get": {
+				"description": "Identity Resolution returns the best matches for given criteria using Dun & Bradstreet proprietary algorithms.\n\nData Coverage: Global\nNote: This API is available as part of \"Company Entity Resolution\" Non Standard Data Blocks.",
+				"summary": "Identity Resolution Cleanse Match",
+				"operationId": "IDRCleanseMatch",
+				"x-monitoring": "Not Available.",
+				"x-monitoring-pdf": "Not Available.",
+				"parameters": [
+					{
+						"name": "inLanguage",
+						"in": "query",
+						"required": false,
+						"description": "An IETF BCP 47 code value that defines the language to be used to perform the match.<br/><br/>Values:<br/>* auto<br/>* ja-JP (Japanese)<br/>* zh-hans-CN (Simplified Chinese)<br/>* zh-hant-TW (Traditional Chinese)<br/>* zh-hant-HK (Hong Kong)<br/>* ko-hang-KR (Hangul)<br/>* en-US (English)<br/><br/><br/>* If not specified, the default is en-US.<br/>* If auto is specified, for Name and Address Lookup:<br/><br/>- If no character of above languages is detected in name or streetAddressLine1 query parameters, then inLanguage parameter is set to en-US.<br/><br/>- If any character of above languages is detected in name or streetAddressLine1 query parameters, then<br/><br/>- for China, Japan, Taiwan, South Korea and Hong Kong countries/Markets, inLanguage parameter is set to zh-hans-CN.<br/><br/>- for other countries/markets, error is returned.<br/><br/>Asian Language Matching featture is a Limited Availability feature. Please contact D&B representative before using it.",
+						"example": "ja-JP",
+						"schema": {
+							"type": "string",
+							"enum": [
+								"auto",
+								"ja-JP",
+								"zh-hans-CN",
+								"zh-hant-TW",
+								"zh-hant-HK",
+								"ko-hang-KR",
+								"th-TH",
+								"en-US"
+							]
+						}
+					},
+					{
+						"name": "duns",
+						"in": "query",
+						"required": false,
+						"description": "A 9-character numeric string identifying the entity by its Dun & Bradstreet D-U-N-S number.",
+						"example": "804735132",
+						"schema": {
+							"type": "string",
+							"maxLength": 9
+						}
+					},
+					{
+						"name": "registrationNumber",
+						"in": "query",
+						"required": false,
+						"description": "The number assigned by an external body or by Dun & Bradstreet that either uniquely identifies or helps to identify an organization.<br/><br/>This value is required for Registration Match.",
+						"example": "11514917000120",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "registrationNumberType",
+						"in": "query",
+						"required": false,
+						"description": "A unique code assigned by Dun & Bradstreet to identify the type of registration number.<br/><br/>Refer to RegistrationNumberType.xlsx file for all possible values which are a subset of Code Table 7 [Registration Number Type].<br/><br/>Note : registrationNumberType is optional except for inquiries on the following, where it is mandatory.<br/><br/>* 33461 Office of Scottish Charity Regulator Charity Number (GB)<br/>* 33462 Charity Commission of Northern Ireland Charity Number (GB)<br/>* 33463 Charity Commission for England & Wales Charity Number (GB)<br/>* 33482 Financial Conduct Authority Reference Number (GB)",
+						"example": 33482,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "name",
+						"in": "query",
+						"required": false,
+						"description": "Up to 240 characters used to find the entity by its primary name, tradestyle names, or former names.<br/><br/>This value is required for Asian Matching and High-Volume matching.",
+						"example": "string used to search for entities",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					},
+					{
+						"name": "streetAddressLine1",
+						"in": "query",
+						"required": false,
+						"description": "Up to 70 characters of the first line of the entity's street address.<br/><br/>This value is required for \"Name and Address\" Match.",
+						"example": "street address",
+						"schema": {
+							"type": "string",
+							"maxLength": 70
+						}
+					},
+					{
+						"name": "streetAddressLine2",
+						"in": "query",
+						"required": false,
+						"description": "Up to 70 characters of the second line of the entity's street address.",
+						"example": "street address line 2",
+						"schema": {
+							"type": "string",
+							"maxLength": 70
+						}
+					},
+					{
+						"name": "countryISOAlpha2Code",
+						"in": "query",
+						"required": false,
+						"description": "The 2-letter country/market code defined by the International Organization for Standardization (ISO) ISO 3166-1 scheme identifying the country of the entity.<br/><br/>This parameter is required for \"Name and Address\", \"Registration Number\" and \"Telephone Number\" Match.",
+						"example": "US",
+						"schema": {
+							"type": "string",
+							"maxLength": 2
+						}
+					},
+					{
+						"name": "postalCode",
+						"in": "query",
+						"required": false,
+						"description": "Up to 10 characters of the identifier used by the local country's postal authority to identify where the address is located.<br/><br/>This value is required for Postal Code Match.",
+						"example": "94536",
+						"schema": {
+							"type": "string",
+							"maxLength": 10
+						}
+					},
+					{
+						"name": "addressLocality",
+						"in": "query",
+						"required": false,
+						"description": "1 to 50 characters that identifies the city, town, township, village, borough, etc. where the entity is located.",
+						"example": "short hills",
+						"schema": {
+							"type": "string",
+							"maxLength": 50
+						}
+					},
+					{
+						"name": "addressRegion",
+						"in": "query",
+						"required": false,
+						"description": "The name of the locally governed area that forms part of a centrally governed nation to identify where the address is located.<br/><br/>Note: As a guiding principle this is a geographic area which could theoretically exist as a separate nation. In the U.S. this would be a State. In the UK this would be one of the Home Nations.<br/><br/>If country is US or CA, the Region must be 2 characters.<br/>For other countries, it can be up to 64 characters.",
+						"example": "NJ",
+						"schema": {
+							"type": "string",
+							"maxLength": 64
+						}
+					},
+					{
+						"name": "addressCounty",
+						"in": "query",
+						"required": false,
+						"description": "The name of the county in which this address is located.<br/><br/>Applies only to high-volume match, not transactional Identity Resolution, Match and Append, or mult-process small batch requests.",
+						"example": "Essex",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "telephoneNumber",
+						"in": "query",
+						"required": false,
+						"description": "The sequence of digits used for voice communication with the entity. This sequence of digits includes the area code or city code and domestic dialing code.<br/><br/>Valid values:<br/>- For Asian matching, up to 16 characters.<br/>- For non-Asian matching, up to 32 characters.<br/><br/>This value is required for Telephone Number Match.",
+						"example": "5555555555",
+						"schema": {
+							"type": "string",
+							"maxLength": 32
+						}
+					},
+					{
+						"name": "url",
+						"in": "query",
+						"required": false,
+						"description": "A URL used to identify an entity by its email domain.",
+						"example": "www.dnb.com",
+						"schema": {
+							"type": "string",
+							"maxLength": 255
+						}
+					},
+					{
+						"name": "email",
+						"in": "query",
+						"required": false,
+						"description": "An email address used to identify an entity by its email domain.",
+						"example": "jones@dnb.com",
+						"schema": {
+							"type": "string",
+							"maxLength": 100
+						}
+					},
+					{
+						"name": "customerBillingEndorsement",
+						"in": "query",
+						"required": false,
+						"description": "Text that is filled in by customer and commonly contains requesting individual or department name, or customer's own account/reference number and/or name for the case on which the product was provided. This text is a reference used during the billing process.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match and Customer Reference can be used as an alternative parameter.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "candidateMaximumQuantity",
+						"in": "query",
+						"required": false,
+						"description": "The maximum number of results to be returned.<br/><br/>Valid values: 1 to 100<br/>If not specified, the default of 10 is used.<br/>​Value is ignored for Multi-Process which always uses value of 1.<br/><br/>Maximum limit is 25, except for a nationwide search in US, CA - Maximum limit is 100.<br/><br/>Note : Refer Guide as this value varies based on IDR Lookup type and this parameter is not applicable for Multi-Process Batch Match and High-Volume Match.",
+						"example": 25,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "confidenceLowerLevelThresholdValue",
+						"in": "query",
+						"required": false,
+						"description": "The lowest confidence level for entities returned in the response.<br/><br/>Valid values: 1 to 10<br/>If not specified, the default of 4 is used.<br/><br/>Note: This value is ignored for Asian Matching and Multi-Process<br/>High-Volume Match.",
+						"example": 7,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "exclusionCriteria",
+						"in": "query",
+						"required": false,
+						"description": "Provides the ability to exclude entities based on several properties.<br/><br/>Values:<br/>* ExcludeNonHeadQuarters: Only entities that are headquarters are returned. A headquarter is defined as Parent/HQ, Domestic Ultimate, or Global Ultimate.<br/>* ExcludeNonMarketable: Only entities where isMarketable = true are returned.<br/>* ExcludeOutofBusiness: Only entities where isOutofBusiness = false are returned.<br/>* ExcludeUndeliverable: Only entities where isMailUndeliverable = false are returned.<br/>* ExcludeUnreachable: Only entites where isUnreachable = false are returned.<br/><br/>Up to 5 attributes will be accepted.<br/><br/>Note: This parameter is not applicable for Asian Matching and Multi-Process High-Volume Match.",
+						"example": "ExcludeNonHeadQuarters,ExcludeNonMarketable",
+						"schema": {
+							"type": "string",
+							"enum": [
+								"ExcludeNonHeadQuarters",
+								"ExcludeNonMarketable",
+								"ExcludeOutofBusiness",
+								"ExcludeUndeliverable",
+								"ExcludeUnreachable"
+							]
+						}
+					},
+					{
+						"name": "isCleanseAndStandardizeInformationRequired",
+						"in": "query",
+						"required": false,
+						"description": "Indicates if the cleanse and standardize information should be returned with the response.<br/><br/>* If true, it is returned.<br/>* If false, it is not returned. (default)<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match.",
+						"example": true,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "customerReference1",
+						"in": "query",
+						"required": false,
+						"description": "A free form reference string provided by the customer to be linked to the request in order to support subsequent order reconciliation.<br/><br/>Up to 5 attributes for customerReference will be accepted.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					},
+					{
+						"name": "customerReference2",
+						"in": "query",
+						"required": false,
+						"description": "A free form reference string provided by the customer to be linked to the request in order to support subsequent order reconciliation.<br/><br/>Up to 5 attributes for customerReference will be accepted.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					},
+					{
+						"name": "customerReference3",
+						"in": "query",
+						"required": false,
+						"description": "A free form reference string provided by the customer to be linked to the request in order to support subsequent order reconciliation.<br/><br/>Up to 5 attributes for customerReference will be accepted.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					},
+					{
+						"name": "customerReference4",
+						"in": "query",
+						"required": false,
+						"description": "A free form reference string provided by the customer to be linked to the request in order to support subsequent order reconciliation.<br/><br/>Up to 5 attributes for customerReference will be accepted.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					},
+					{
+						"name": "customerReference5",
+						"in": "query",
+						"required": false,
+						"description": "A free form reference string provided by the customer to be linked to the request in order to support subsequent order reconciliation.<br/><br/>Up to 5 attributes for customerReference will be accepted.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match.",
+						"example": "request reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"transactionDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"transactionID": {
+													"type": "string",
+													"nullable": true,
+													"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+													"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+												},
+												"transactionTimestamp": {
+													"type": "string",
+													"nullable": true,
+													"example": "2017-02-21T17:46:19.839Z",
+													"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+												},
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US",
+													"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+												},
+												"serviceVersion": {
+													"type": "string",
+													"nullable": true,
+													"example": "1",
+													"description": "The product version number provided in the request."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The information used to process this request."
+										},
+										"inquiryDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US",
+													"description": "The language provided in the request."
+												},
+												"duns": {
+													"type": "string",
+													"nullable": true,
+													"example": "804735132",
+													"description": "The D-U-N-S number provided in the request."
+												},
+												"registrationNumber": {
+													"type": "string",
+													"nullable": true,
+													"example": "11514917000120",
+													"description": "The registration numbers provided in the request."
+												},
+												"registrationNumberType": {
+													"type": "integer",
+													"nullable": true,
+													"example": 1340,
+													"description": "The registration number type provided in the request.<br/>Refer to Reference code table \"7 [Registration Number Type]\" for all possible values."
+												},
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "Company name",
+													"description": "The name provided in the request."
+												},
+												"address": {
+													"type": "object",
+													"nullable": true,
+													"properties": {
+														"countryISOAlpha2Code": {
+															"type": "string",
+															"nullable": true,
+															"example": "US",
+															"description": "The country code provided in the request."
+														},
+														"addressLocality": {
+															"type": "string",
+															"nullable": true,
+															"example": "Short Hills",
+															"description": "The locality provided in the request."
+														},
+														"addressRegion": {
+															"type": "string",
+															"nullable": true,
+															"example": "New Jersey",
+															"description": "The region provided in the request."
+														},
+														"postalCode": {
+															"type": "string",
+															"nullable": true,
+															"example": "7040",
+															"description": "The postal code provided in the request."
+														},
+														"streetAddressLine": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"line1": {
+																	"type": "string",
+																	"nullable": true,
+																	"example": "103 JFK PKWY",
+																	"description": "The street address line1 provided in the request."
+																},
+																"line2": {
+																	"type": "string",
+																	"nullable": true,
+																	"example": "4th Floor",
+																	"description": "The street address line2 provided in the request."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The street address details provided in the request."
+														}
+													},
+													"additionalProperties": true,
+													"description": "The address details provided in the request."
+												},
+												"telephoneNumber": {
+													"type": "string",
+													"nullable": true,
+													"example": "9739215500",
+													"description": "The telephone number provided in the request."
+												},
+												"url": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://www.dnb.com",
+													"description": "The URL provided in the request."
+												},
+												"email": {
+													"type": "string",
+													"nullable": true,
+													"example": "jsmith@company.com",
+													"description": "The email address provided in the request."
+												},
+												"customerBillingEndorsement": {
+													"type": "string",
+													"nullable": true,
+													"example": "My billing reminder.",
+													"description": "The text submitted in the request. This text is a reference used during the billing process."
+												},
+												"candidateMaximumQuantity": {
+													"type": "integer",
+													"nullable": true,
+													"example": 25,
+													"description": "The maximum number of candidates requested."
+												},
+												"confidenceLowerLevelThresholdValue": {
+													"type": "integer",
+													"nullable": true,
+													"example": 6,
+													"description": "The confidence lower level provided in the request."
+												},
+												"exclusionCriteria": {
+													"type": "array",
+													"nullable": true,
+													"description": "The exclusion criteria provided in the request.",
+													"items": {
+														"type": "string",
+														"nullable": true,
+														"example": [
+															"ExcludeNonHeadQuarters"
+														]
+													}
+												},
+												"isCleanseAndStandardizeInformationRequired": {
+													"type": "boolean",
+													"nullable": true,
+													"example": true,
+													"description": "The cleanse and standardized information value provided in the request."
+												},
+												"customerReference": {
+													"type": "array",
+													"nullable": true,
+													"description": "A reference string provided by the customer for this particular transaction.",
+													"items": {
+														"type": "string",
+														"nullable": true,
+														"example": [
+															"Some text to describe the request."
+														]
+													}
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the input data provided."
+										},
+										"candidatesMatchedQuantity": {
+											"type": "integer",
+											"nullable": true,
+											"example": 100,
+											"description": "The total number of candidates found matching search criteria."
+										},
+										"matchDataCriteria": {
+											"type": "string",
+											"nullable": true,
+											"example": "Name and Address Lookup",
+											"description": "The type of match performed to identify the identified entity. May be one of the following:<br/><br/>- DUNS Number Lookup: D-U-N-S Number was used to perform match.<br/>- Name and Address Lookup: Name and Address were used to perform match.<br/>- National ID Lookup: Registration Number was used to perform match.<br/>- Telephone Number Lookup: Telephone Number was used to perform match.<br/>- ZIP Code Lookup: Postal Code was used to perform match.<br/>- Domain Lookup: URL or Email Address was used to perform match.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+										},
+										"matchCandidates": {
+											"type": "array",
+											"nullable": true,
+											"description": "The details of the entities found by the system.",
+											"items": {
+												"type": "object",
+												"nullable": true,
+												"properties": {
+													"displaySequence": {
+														"type": "integer",
+														"nullable": true,
+														"example": 1,
+														"description": "The order in which the entity appears in the result set. The lower the number the better the probability of the match."
+													},
+													"organization": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"duns": {
+																"type": "string",
+																"nullable": true,
+																"maxLength": 9,
+																"example": "804735132",
+																"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+															},
+															"dunsControlStatus": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"operatingStatus": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"description": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "Active",
+																				"description": "The entity's functional state or trading status summarized into either active or out of business.<br/>Refer to Reference code table \"Code Table = 166 [ Operating Status ]\" for all possible values."
+																			},
+																			"dnbCode": {
+																				"type": "integer",
+																				"nullable": true,
+																				"enum": [
+																					9074,
+																					403
+																				],
+																				"example": 9074,
+																				"description": "A unique code assigned by Dun & Bradstreet to identify the entity's functional state or trading status.<br/>Possible values:<br/>9074 [Active]<br/>403 [Out of Business]<br/>Refer to Reference code table \"166 [Operating Status]\" for all possible values."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The high level categorization of the entity's functional state or trading status."
+																	},
+																	"isMailUndeliverable": {
+																		"type": "boolean",
+																		"nullable": true,
+																		"example": true,
+																		"description": "Indicates whether it is possible to deliver mail to the address of this entity.<br/><br/>- If true, it is not possible to deliver mail to at least one of the addresses listed for this DUNS (Primary, Mailing or Registered).<br/>- If false, it is possible to deliver mail to the address."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the organization's functional state and controls that impact its suitability for various usage purposes."
+															},
+															"primaryName": {
+																"type": "string",
+																"nullable": true,
+																"example": "GORMAN MANUFACTURING COMPANY, INC.",
+																"description": "Single name by which the organization is primarily known or identified."
+															},
+															"tradeStyleNames": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the names that the entity trades under for commercial purposes although its registered legal name used for contracts and other formal situations may be another name.<br/><br/>NOTE: tradeStyleNames will be returned only when customer given input matches against tradestyle name.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"name": {
+																			"type": "string",
+																			"nullable": true,
+																			"maxLength": 100,
+																			"example": "Alternate Company Name",
+																			"description": "The name that the entity trades under for commercial purposes although its registered legal name used for contracts and other formal situations may be another name.<br/><br/>NOTE: tradeStyleNames will be returned only when customer given input matches against trade style name."
+																		},
+																		"priority": {
+																			"type": "integer",
+																			"nullable": true,
+																			"example": 1,
+																			"description": "A numeric value used to identify the relative importance of a Trade Style Name compared to other Trade Style Names. The lower the numeric value the earlier the data is displayed (i.e. 1 indicates the most important name, 2 the second most important etc...)"
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"telephone": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the Telephone contact information used for voice communication with the organization.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"telephoneNumber": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "6505550000",
+																			"description": "The primary voice telephone number for the business, when dialing domestically. The National Telephone Number is created by combining the Domestic Area Code and the Local Number.<br/><br/>A Domestic Area Code is a series of numbers that must be prefixed before dialing a telephone number in another local area. National telecommunication authorities use various formats and dialing rules for area codes. Also known as City Code.<br/><br/>A Local Number is a series of numbers that represents a specific telephone line."
+																		},
+																		"isUnreachable": {
+																			"type": "boolean",
+																			"nullable": true,
+																			"example": true,
+																			"description": "Indicates whether the telephone number can be connected to successfully.<br/><br/>- If true, connection to the telephone number is unsuccessful.<br/>- If false, connection to the telephone number is successful."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"websiteAddress": {
+																"type": "array",
+																"nullable": true,
+																"description": "DO NOT USE. This element is deprecated.<br/><br/>The details of the internet URLs used for online information and communication with the Organization.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"url": {
+																			"type": "string",
+																			"nullable": true,
+																			"maxLength": 255,
+																			"example": "http://www.gorman.com",
+																			"description": "DO NOT USE. This element is deprecated.<br/><br/>The Internet URL (Uniform Resource Locator) that uniquely identifies the proprietary website of the Organization or the website preferred by the Organization that gives more information on the entity."
+																		},
+																		"domainName": {
+																			"type": "string",
+																			"nullable": true,
+																			"maxLength": 150,
+																			"example": "gorman.com",
+																			"description": "DO NOT USE. This element is deprecated.<br/><br/>A unique name used to identify the website of the Organization that serves as an address to access that website."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"primaryAddress": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"addressCountry": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"isoAlpha2Code": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "US",
+																				"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region for this address of the organization."
+																			},
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "United States",
+																				"description": "The country or region for this address of the organization.<br/>Refer to Reference code table \"ISOCountry: ISO Country Codes\" for all possible values."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The details of the country or region for this address of the organization"
+																	},
+																	"addressLocality": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"maxLength": 50,
+																				"example": "SAN FRANCISCO",
+																				"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+																	},
+																	"addressRegion": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "California",
+																				"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+																			},
+																			"abbreviatedName": {
+																				"type": "string",
+																				"nullable": true,
+																				"minLength": 2,
+																				"maxLength": 2,
+																				"example": "CA",
+																				"description": "The shortened name of the geographical area for this address of the organization. For example NJ for the US State New Jersey within Country United States."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+																	},
+																	"postalCode": {
+																		"type": "string",
+																		"nullable": true,
+																		"maxLength": 10,
+																		"example": "941109999",
+																		"description": "The postal code for this address of the organization.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+																	},
+																	"postalCodeExtension": {
+																		"type": "string",
+																		"nullable": true,
+																		"maxLength": 10,
+																		"example": "9999",
+																		"description": "An extension to the postal code that identifies a street or building within the geographic area covered by the Postal Code."
+																	},
+																	"streetAddress": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"line1": {
+																				"type": "string",
+																				"nullable": true,
+																				"maxLength": 70,
+																				"example": "492 KOLLER ST",
+																				"description": "The first line of the address where the entity is located.<br/><br/>The first line of this address of the organization. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																			},
+																			"line2": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "Suite 100",
+																				"description": "The second line of this address of the organization.<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The details of the street address for this address of the organization."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the Primary Address at which the organization is located or conducts operations."
+															},
+															"mailingAddress": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"addressCountry": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"isoAlpha2Code": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "US",
+																				"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region for this address of the organization."
+																			},
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "United States",
+																				"description": "The country or region for this address of the organization.<br/>Refer to Reference code table \"ISOCountry: ISO Country Codes\" for all possible values."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The details of the country or region for this address of the organization."
+																	},
+																	"addressLocality": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"maxLength": 50,
+																				"example": "SAN FRANCISCO",
+																				"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+																	},
+																	"addressRegion": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"name": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "California",
+																				"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+																			},
+																			"abbreviatedName": {
+																				"type": "string",
+																				"nullable": true,
+																				"minLength": 2,
+																				"maxLength": 2,
+																				"example": "CA",
+																				"description": "The shortened name of the geographical area for this address of the organization. For example NJ for the US State New Jersey within Country United States."
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+																	},
+																	"postalCode": {
+																		"type": "string",
+																		"nullable": true,
+																		"maxLength": 10,
+																		"example": "941109999",
+																		"description": "The postal code for this address of the organization.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+																	},
+																	"postalCodeExtension": {
+																		"type": "string",
+																		"nullable": true,
+																		"maxLength": 10,
+																		"example": "9999",
+																		"description": "An extension to the postal code that identifies a street or building within the geographic area covered by the Postal Code."
+																	},
+																	"streetAddress": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"line1": {
+																				"type": "string",
+																				"nullable": true,
+																				"maxLength": 70,
+																				"example": "492 KOLLER ST",
+																				"description": "The first line of the address where the entity is located.<br/><br/>The first line of this address of the organization. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																			},
+																			"line2": {
+																				"type": "string",
+																				"nullable": true,
+																				"example": "Suite 100",
+																				"description": "The second line of this address of the organization.<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																			}
+																		},
+																		"additionalProperties": true,
+																		"description": "The details of the street address for this address of the organization."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the address used by the entity for mailing purposes."
+															},
+															"registrationNumbers": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the organization's identifiers issued by a recognized external authority to uniquely identify subjects. The issuing authority may be a Registration Authority, Government Department or Commercial Enterprise (e.g., Chamber of Commerce numbers, VAT numbers).",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"registrationNumber": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "12-3456789",
+																			"description": "The number or alphanumeric value assigned by a recognized external authority that either uniquely identifies or helps to identify the organization."
+																		},
+																		"typeDescription": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "Federal Taxpayer Identification Number (US)",
+																			"description": "The official name of the organization identifier assigned by a recognized external authority (e.g.. Australian Company Number, Federal Taxpayer Identification Number, Value Added Tax Number).<br/>Refer to Reference code table \"REGN_CD <br/>/s:Envelope/s:Body/EMF1/EMF1MSGSRSV1/LOOKUPRS/LOOKUPRSCOMPANY/REGN_CD\" for all possible values."
+																		},
+																		"typeDnBCode": {
+																			"type": "integer",
+																			"nullable": true,
+																			"example": 6863,
+																			"description": "A unique code assigned by Dun & Bradstreet to identify the type of organization identifier. For example, 2541 stands for company number issued by the UK Companies House.<br/>Refer to Reference code table \"7 [Registration Number Type]\" for all possible values."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"mostSeniorPrincipals": {
+																"type": "array",
+																"nullable": true,
+																"description": "The person identified as a highest ranking key stakeholder of a business or organization by the local registry or other official sources. A key stakeholder can be a natural person or an organization. Only one record should be classified as the \"most senior principal\".",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"fullName": {
+																			"type": "string",
+																			"nullable": true,
+																			"maxLength": 120,
+																			"example": "Leslie Ann Smith",
+																			"description": "The highest ranking key stakeholder's given and surname in addition to the middle name and name suffix (when available) listed on one field if the key stakeholder is an individual. This will be submitted in the appropriate format for the local country. If the highest ranking key stakeholder is an organization, the name of the organization will be populated in the full name field."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"isStandalone": {
+																"type": "boolean",
+																"nullable": true,
+																"example": false,
+																"description": "Indicates if the entity is a member of a legal family tree.<br/><br/>- If true, indicates that the entity is not a member of a legal family tree. This means it cannot play any family tree role and corporateLinkage will not be present.<br/>- If false, indicates that the entity is a member of a legal family tree. The roles it plays is indicated by Family Tree Member Roles played."
+															},
+															"corporateLinkage": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"familytreeRolesPlayed": {
+																		"type": "array",
+																		"nullable": true,
+																		"description": "The details of the roles the entity plays as a member of an ownership structured family tree.<br/><br/>Note : Max 1 value will appear.",
+																		"items": {
+																			"type": "object",
+																			"nullable": true,
+																			"properties": {
+																				"description": {
+																					"type": "string",
+																					"nullable": true,
+																					"example": "Parent/Headquarters",
+																					"description": "The role the entity plays as a member of an ownership structured family tree (e.g., a branch, division, a parent, headquarters, subsidiary)."
+																				},
+																				"dnbCode": {
+																					"type": "integer",
+																					"nullable": true,
+																					"enum": [
+																						9140,
+																						9141,
+																						9159,
+																						12769
+																					],
+																					"example": 9141,
+																					"description": "A unique code assigned by Dun & Bradstreet to identify describing family tree role.<br/><br/>Possible Values:<br/>9140 - Branch/Division<br/>9141 - Parent/Headquarters<br/>9159 - Subsidiary<br/>12769 - Branch<br/>Refer to Reference code table \"202 [Family Tree Role]\" for all possible values."
+																				}
+																			},
+																			"additionalProperties": true
+																		}
+																	}
+																},
+																"additionalProperties": true,
+																"description": "Details of organization to organization relationships based on majority ownership or control (>50%). There are two types of relationships, branch/division to Headquarter and Subsidiary to Parent."
+															}
+														},
+														"additionalProperties": true,
+														"description": "The details of the entity."
+													},
+													"matchQualityInformation": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"confidenceCode": {
+																"type": "integer",
+																"nullable": true,
+																"example": 6,
+																"description": "A numeric value from 1 (low) up to 10 (high) indicating the level of certainty at which this possible candidate was included in this result set."
+															},
+															"matchGrade": {
+																"type": "string",
+																"nullable": true,
+																"minLength": 11,
+																"maxLength": 11,
+																"example": "AZZZZZZZFZZ",
+																"description": "The compound rating that comprises one rating per type of data scored by a match engine.<br/><br/>For example, in AABZBAAAFBZ the \"A\" in the 1st position means that the Name scored between 80-100 and the \"A\" in the 2nd position means that the Street Number had to score exactly 100.<br/><br/>For more details, please see the Identity Resolution guide."
+															},
+															"matchGradeComponentsCount": {
+																"type": "integer",
+																"nullable": true,
+																"example": 11,
+																"description": "The number of constituent parts that were used in the calculation of the Match Grade."
+															},
+															"matchGradeComponents": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the components measured by the match engine.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"componentType": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "Name",
+																			"description": "The component (e.g., Name, Street Number) of the Match Grade that was measured by the match engine."
+																		},
+																		"componentRating": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "A",
+																			"description": "The quality of the match result on this component. The rating is based on a scoring system."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"matchDataProfile": {
+																"type": "string",
+																"nullable": true,
+																"example": "0000000000989800000000009898",
+																"description": "The information that the matching process used to arrive at a match in addition to the application's business rules and parameters specified by the requestor.<br/><br/>This is a 28-byte string consisting of 14 components of 2 bytes each.<br/><br/>The 14 components are, in order, Name, Street Number, Street Name, Town Name, Territory Name, P.O. Box, Telephone, Post Code, D-U-N-S Number, Industry Code, Geographical Density, Location Uniqueness, Registration Number and URL."
+															},
+															"matchDataProfileComponentsCount": {
+																"type": "integer",
+																"nullable": true,
+																"example": 14,
+																"description": "The number of constituent parts (e.g., Name, Street Number) that were used in the calculation of the Match Data Profile."
+															},
+															"matchDataProfileComponents": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the constituent parts (e.g., Name, Street Number) that were used in the calculation of the Match Data Profile.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"componentType": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "Name",
+																			"description": "The specific component type used."
+																		},
+																		"componentValue": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "False",
+																			"description": "The value of the component described in Match Data Profile Component Type."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"nameMatchScore": {
+																"type": "number",
+																"nullable": true,
+																"example": 85.5,
+																"description": "A number from -1 to 100 (including decimals) that indicates the detailed level of match on the name of the matched candidate.<br/><br/>- 0 indicates no match.<br/>- 100 indicates most accurate match.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+															}
+														},
+														"additionalProperties": true,
+														"description": "The details of the parameters and components assessed by the Match engine."
+													}
+												},
+												"additionalProperties": true
+											}
+										},
+										"cleanseAndStandardizeInformation": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"standardizedName": {
+													"type": "string",
+													"nullable": true,
+													"maxLength": 255,
+													"example": "STANDARD COMPANY",
+													"description": "The standardized name of the entity."
+												},
+												"standardizedAddress": {
+													"type": "object",
+													"nullable": true,
+													"properties": {
+														"addressCountry": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"isoAlpha2Code": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 10,
+																	"example": "AR",
+																	"description": "The standardized country code."
+																},
+																"name": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 255,
+																	"example": "ARGENTINA",
+																	"description": "The standardized Address Country/Market name."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The details of the standardized Address Country/Market."
+														},
+														"addressLocality": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"name": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 255,
+																	"example": "BUENOS AIRES",
+																	"description": "The standardized address locality name."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The details of the standardized address locality."
+														},
+														"addressRegion": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"name": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 255,
+																	"example": "CIUDAD DE BUENOS AIRES",
+																	"description": "The standardized address region name."
+																},
+																"abbreviatedName": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 5,
+																	"example": "DF",
+																	"description": "The standardized abbreviated region name."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The details of the standardized address region."
+														},
+														"addressCounty": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"name": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 50,
+																	"example": "SOME COUNTY",
+																	"description": "The standardized address county name."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The details of the standardized address county."
+														},
+														"postalCode": {
+															"type": "string",
+															"nullable": true,
+															"maxLength": 10,
+															"example": "750802686",
+															"description": "The standardized address postal code."
+														},
+														"postalCodeExtension": {
+															"type": "string",
+															"nullable": true,
+															"maxLength": 4,
+															"example": "1378",
+															"description": "The standardized address postal code extension."
+														},
+														"streetAddress": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"line1": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 255,
+																	"example": "CALLEJUELA 508",
+																	"description": "The standardized street address line 1."
+																},
+																"line2": {
+																	"type": "string",
+																	"nullable": true,
+																	"maxLength": 255,
+																	"example": "LINE TWO",
+																	"description": "The standardized street address line 2."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The details of the standardized street address."
+														},
+														"deliveryPointValidationStatus": {
+															"type": "string",
+															"nullable": true,
+															"example": "No DPV Address",
+															"description": "Indicates if mail can be delivered to this address.<br/><br/>Possible values; more details on these codes and indicators can be obtained through the US Postal Service:<br/><br/>- Delivery Point Validated: This is equal to DSF Deliverability Indicator #1.<br/><br/>- No DPV: Address is invalid and may be undeliverable. It might however, qualify for a ZIP+4. This is equal to DSF Deliverability Indicator #4 or higher or X.<br/><br/>- DPV STE Bad: Street address is valid, but the submitted secondary address details (e.g., suite, room, floor or apartment number) are incorrect. This address is possibly deliverable, at the letter carrier's option. This is equal to DSF Deliverability Indicator #2.<br/><br/>- Missing STE: Street address is valid, but the secondary address details (e.g., suite, room, floor or apartment number) are missing. This address is possibly deliverable, at the letter carrier's option.<br/><br/>- Invalid Address: Address is invalid, undeliverable, and could not be identified by DPV. This is a fictitious address on the DPV file designed to identify mis-use of USPS data. Contact your DB rep.<br/><br/>- No DPV Address: DPV cannot categorize the input address."
+														},
+														"deliveryPointValidationCMRAValue": {
+															"type": "string",
+															"nullable": true,
+															"example": "No DPV Address",
+															"description": "Indicates if this address is valid Commercial Mail Receiving Agency (CMRA). A CMRA is a private business that accepts mail delivery from the Postal Service for others (addressee), holds it for pickup (in most cases a private mailbox (PMB\") or re-mails it to another address with payment of new postage.<br/><br/>- Delivery Point Validated: The address is a valid CRMA.<br/>- Invalid Address: Address is invalid, undeliverable, and could not be identified by DPV. This is a fictitious address on the DPV file designed to identify mis-use of USPS data. Contact your DB rep.<br/>- No DPV: Address is invalid and may be undeliverable.<br/>- No DPV Address: DPV cannot categorize the input address."
+														},
+														"isInexactAddress": {
+															"type": "boolean",
+															"nullable": true,
+															"example": true,
+															"description": "Indicates if this address is strictly accurate or precise.<br/><br/>- If true, the address is not strictly accurate or precise.<br/>- If false, the address is strictly accurate or precise; however as this is the assumed condition there is no requirement to create this tag to represent this fact."
+														},
+														"addressType": {
+															"type": "string",
+															"nullable": true,
+															"enum": [
+																"Firm",
+																"General delivery",
+																"High Rise",
+																"Military",
+																"Post office box",
+																"Rural or Highway Route",
+																"Street",
+																"Unknown"
+															],
+															"example": "Street",
+															"description": "Indicates if there is a business at this address.<br/><br/>Possible Values:<br/>- Firm: There is a business at this address; it could be a residential location with business signage.<br/>- General delivery: The address of the post office where the entity picks up mail. It is not where the entity is located.<br/>- High Rise: Apartment or office building. The USPS defines a High Rise as any location with more than 4 delivery points.<br/>- Military - APO/FPO addresses: The address is an entry point into the military postal system, which delivers to the recipient anywhere in the world. The recipient is not actually at the address.<br/>- Post office box: Address is for a box at a Post Office location.<br/>- Rural or Highway Route: This address is a stop on a route; it is not a physical location.<br/>- Street: A physical location that is not a high-rise.<br/>- Unknown: Address cannot be categorized. This is not a negative. Many delivery points on the DSF file, which is where all these designations come from, have no delivery type categorization. Carriers manually submit these categories."
+														}
+													},
+													"additionalProperties": true,
+													"description": "The details of the standardized address of the entity."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the standardized values used for industry needs and effective identification.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+										}
+									}
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"transactionDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"transactionID": {
+													"type": "string",
+													"nullable": true,
+													"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+													"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+												},
+												"transactionTimestamp": {
+													"type": "string",
+													"nullable": true,
+													"example": "2017-02-21T17:46:19.839Z",
+													"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+												},
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US",
+													"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+												},
+												"serviceVersion": {
+													"type": "string",
+													"nullable": true,
+													"example": "1",
+													"description": "The product version number provided in the request."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The information used to process this request."
+										},
+										"error": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"errorCode": {
+													"type": "string",
+													"nullable": true,
+													"description": "A number assigned by D&B which uniquely identifies the reason for failure of this request."
+												},
+												"errorMessage": {
+													"type": "string",
+													"nullable": true,
+													"description": "An explanatory text providing more details about the reason for failure of this request."
+												},
+												"errorInformationURL": {
+													"type": "string",
+													"nullable": true,
+													"description": "The D&B website URL which provides the complete list of possible errors with their error codes and any other related information."
+												}
+											},
+											"additionalProperties": true,
+											"description": "Records the failures resulted out of this transaction. This section is created only when the customer request was not fulfilled due to system failures, incorrect or incomplete request parameters etc.,"
+										},
+										"inquiryDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US",
+													"description": "The language provided in the request."
+												},
+												"duns": {
+													"type": "string",
+													"nullable": true,
+													"example": "804735132",
+													"description": "The D-U-N-S number provided in the request."
+												},
+												"registrationNumber": {
+													"type": "string",
+													"nullable": true,
+													"example": "11514917000120",
+													"description": "The registration numbers provided in the request."
+												},
+												"registrationNumberType": {
+													"type": "integer",
+													"nullable": true,
+													"example": 1340,
+													"description": "The registration number type provided in the request.<br/>Refer to Reference code table \"7 [Registration Number Type]\" for all possible values."
+												},
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "Company name",
+													"description": "The name provided in the request."
+												},
+												"address": {
+													"type": "object",
+													"nullable": true,
+													"properties": {
+														"countryISOAlpha2Code": {
+															"type": "string",
+															"nullable": true,
+															"example": "US",
+															"description": "The country code provided in the request."
+														},
+														"addressLocality": {
+															"type": "string",
+															"nullable": true,
+															"example": "Short Hills",
+															"description": "The locality provided in the request."
+														},
+														"addressRegion": {
+															"type": "string",
+															"nullable": true,
+															"example": "New Jersey",
+															"description": "The region provided in the request."
+														},
+														"postalCode": {
+															"type": "string",
+															"nullable": true,
+															"example": "7040",
+															"description": "The postal code provided in the request."
+														},
+														"streetAddressLine": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"line1": {
+																	"type": "string",
+																	"nullable": true,
+																	"example": "103 JFK PKWY",
+																	"description": "The street address line1 provided in the request."
+																},
+																"line2": {
+																	"type": "string",
+																	"nullable": true,
+																	"example": "4th Floor",
+																	"description": "The street address line2 provided in the request."
+																}
+															},
+															"additionalProperties": true,
+															"description": "The street address details provided in the request."
+														}
+													},
+													"additionalProperties": true,
+													"description": "The address details provided in the request."
+												},
+												"telephoneNumber": {
+													"type": "string",
+													"nullable": true,
+													"example": "9739215500",
+													"description": "The telephone number provided in the request."
+												},
+												"url": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://www.dnb.com",
+													"description": "The URL provided in the request."
+												},
+												"email": {
+													"type": "string",
+													"nullable": true,
+													"example": "jsmith@company.com",
+													"description": "The email address provided in the request."
+												},
+												"customerBillingEndorsement": {
+													"type": "string",
+													"nullable": true,
+													"example": "My billing reminder.",
+													"description": "The text submitted in the request. This text is a reference used during the billing process."
+												},
+												"candidateMaximumQuantity": {
+													"type": "integer",
+													"nullable": true,
+													"example": 25,
+													"description": "The maximum number of candidates requested."
+												},
+												"confidenceLowerLevelThresholdValue": {
+													"type": "integer",
+													"nullable": true,
+													"example": 6,
+													"description": "The confidence lower level provided in the request."
+												},
+												"exclusionCriteria": {
+													"type": "array",
+													"nullable": true,
+													"description": "The exclusion criteria provided in the request.",
+													"items": {
+														"type": "string",
+														"nullable": true,
+														"example": [
+															"ExcludeNonHeadQuarters"
+														]
+													}
+												},
+												"isCleanseAndStandardizeInformationRequired": {
+													"type": "boolean",
+													"nullable": true,
+													"example": true,
+													"description": "The cleanse and standardized information value provided in the request."
+												},
+												"customerReference": {
+													"type": "array",
+													"nullable": true,
+													"description": "A reference string provided by the customer for this particular transaction.",
+													"items": {
+														"type": "string",
+														"nullable": true,
+														"example": [
+															"Some text to describe the request."
+														]
+													}
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the input data provided."
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		},
+		"schemas": {
+			"transactionDetail": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"transactionID": {
+						"type": "string",
+						"nullable": true,
+						"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+						"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+					},
+					"transactionTimestamp": {
+						"type": "string",
+						"nullable": true,
+						"example": "2017-02-21T17:46:19.839Z",
+						"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+					},
+					"inLanguage": {
+						"type": "string",
+						"nullable": true,
+						"example": "en-US",
+						"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+					},
+					"serviceVersion": {
+						"type": "string",
+						"nullable": true,
+						"example": "1",
+						"description": "The product version number provided in the request."
+					}
+				},
+				"additionalProperties": true,
+				"description": "The information used to process this request."
+			},
+			"error": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"errorCode": {
+						"type": "string",
+						"nullable": true,
+						"description": "A number assigned by D&B which uniquely identifies the reason for failure of this request."
+					},
+					"errorMessage": {
+						"type": "string",
+						"nullable": true,
+						"description": "An explanatory text providing more details about the reason for failure of this request."
+					},
+					"errorInformationURL": {
+						"type": "string",
+						"nullable": true,
+						"description": "The D&B website URL which provides the complete list of possible errors with their error codes and any other related information."
+					}
+				},
+				"additionalProperties": true,
+				"description": "Records the failures resulted out of this transaction. This section is created only when the customer request was not fulfilled due to system failures, incorrect or incomplete request parameters etc.,"
+			},
+			"inquiryDetail": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"inLanguage": {
+						"type": "string",
+						"nullable": true,
+						"example": "en-US",
+						"description": "The language provided in the request."
+					},
+					"duns": {
+						"type": "string",
+						"nullable": true,
+						"example": "804735132",
+						"description": "The D-U-N-S number provided in the request."
+					},
+					"registrationNumber": {
+						"type": "string",
+						"nullable": true,
+						"example": "11514917000120",
+						"description": "The registration numbers provided in the request."
+					},
+					"registrationNumberType": {
+						"type": "integer",
+						"nullable": true,
+						"example": 1340,
+						"description": "The registration number type provided in the request.<br/>Refer to Reference code table \"7 [Registration Number Type]\" for all possible values."
+					},
+					"name": {
+						"type": "string",
+						"nullable": true,
+						"example": "Company name",
+						"description": "The name provided in the request."
+					},
+					"address": {
+						"type": "object",
+						"nullable": true,
+						"properties": {
+							"countryISOAlpha2Code": {
+								"type": "string",
+								"nullable": true,
+								"example": "US",
+								"description": "The country code provided in the request."
+							},
+							"addressLocality": {
+								"type": "string",
+								"nullable": true,
+								"example": "Short Hills",
+								"description": "The locality provided in the request."
+							},
+							"addressRegion": {
+								"type": "string",
+								"nullable": true,
+								"example": "New Jersey",
+								"description": "The region provided in the request."
+							},
+							"postalCode": {
+								"type": "string",
+								"nullable": true,
+								"example": "7040",
+								"description": "The postal code provided in the request."
+							},
+							"streetAddressLine": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"line1": {
+										"type": "string",
+										"nullable": true,
+										"example": "103 JFK PKWY",
+										"description": "The street address line1 provided in the request."
+									},
+									"line2": {
+										"type": "string",
+										"nullable": true,
+										"example": "4th Floor",
+										"description": "The street address line2 provided in the request."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The street address details provided in the request."
+							}
+						},
+						"additionalProperties": true,
+						"description": "The address details provided in the request."
+					},
+					"telephoneNumber": {
+						"type": "string",
+						"nullable": true,
+						"example": "9739215500",
+						"description": "The telephone number provided in the request."
+					},
+					"url": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://www.dnb.com",
+						"description": "The URL provided in the request."
+					},
+					"email": {
+						"type": "string",
+						"nullable": true,
+						"example": "jsmith@company.com",
+						"description": "The email address provided in the request."
+					},
+					"customerBillingEndorsement": {
+						"type": "string",
+						"nullable": true,
+						"example": "My billing reminder.",
+						"description": "The text submitted in the request. This text is a reference used during the billing process."
+					},
+					"candidateMaximumQuantity": {
+						"type": "integer",
+						"nullable": true,
+						"example": 25,
+						"description": "The maximum number of candidates requested."
+					},
+					"confidenceLowerLevelThresholdValue": {
+						"type": "integer",
+						"nullable": true,
+						"example": 6,
+						"description": "The confidence lower level provided in the request."
+					},
+					"exclusionCriteria": {
+						"type": "array",
+						"nullable": true,
+						"description": "The exclusion criteria provided in the request.",
+						"items": {
+							"type": "string",
+							"nullable": true,
+							"example": [
+								"ExcludeNonHeadQuarters"
+							]
+						}
+					},
+					"isCleanseAndStandardizeInformationRequired": {
+						"type": "boolean",
+						"nullable": true,
+						"example": true,
+						"description": "The cleanse and standardized information value provided in the request."
+					},
+					"customerReference": {
+						"type": "array",
+						"nullable": true,
+						"description": "A reference string provided by the customer for this particular transaction.",
+						"items": {
+							"type": "string",
+							"nullable": true,
+							"example": [
+								"Some text to describe the request."
+							]
+						}
+					}
+				},
+				"additionalProperties": true,
+				"description": "The details of the input data provided."
+			},
+			"candidatesMatchedQuantity": {
+				"type": "integer",
+				"nullable": true,
+				"example": 100,
+				"description": "The total number of candidates found matching search criteria."
+			},
+			"matchDataCriteria": {
+				"type": "string",
+				"nullable": true,
+				"example": "Name and Address Lookup",
+				"description": "The type of match performed to identify the identified entity. May be one of the following:<br/><br/>- DUNS Number Lookup: D-U-N-S Number was used to perform match.<br/>- Name and Address Lookup: Name and Address were used to perform match.<br/>- National ID Lookup: Registration Number was used to perform match.<br/>- Telephone Number Lookup: Telephone Number was used to perform match.<br/>- ZIP Code Lookup: Postal Code was used to perform match.<br/>- Domain Lookup: URL or Email Address was used to perform match.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+			},
+			"matchCandidates": {
+				"type": "array",
+				"nullable": true,
+				"description": "The details of the entities found by the system.",
+				"items": {
+					"type": "object",
+					"nullable": true,
+					"properties": {
+						"displaySequence": {
+							"type": "integer",
+							"nullable": true,
+							"example": 1,
+							"description": "The order in which the entity appears in the result set. The lower the number the better the probability of the match."
+						},
+						"organization": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"duns": {
+									"type": "string",
+									"nullable": true,
+									"maxLength": 9,
+									"example": "804735132",
+									"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+								},
+								"dunsControlStatus": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"operatingStatus": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"description": {
+													"type": "string",
+													"nullable": true,
+													"example": "Active",
+													"description": "The entity's functional state or trading status summarized into either active or out of business.<br/>Refer to Reference code table \"Code Table = 166 [ Operating Status ]\" for all possible values."
+												},
+												"dnbCode": {
+													"type": "integer",
+													"nullable": true,
+													"enum": [
+														9074,
+														403
+													],
+													"example": 9074,
+													"description": "A unique code assigned by Dun & Bradstreet to identify the entity's functional state or trading status.<br/>Possible values:<br/>9074 [Active]<br/>403 [Out of Business]<br/>Refer to Reference code table \"166 [Operating Status]\" for all possible values."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The high level categorization of the entity's functional state or trading status."
+										},
+										"isMailUndeliverable": {
+											"type": "boolean",
+											"nullable": true,
+											"example": true,
+											"description": "Indicates whether it is possible to deliver mail to the address of this entity.<br/><br/>- If true, it is not possible to deliver mail to at least one of the addresses listed for this DUNS (Primary, Mailing or Registered).<br/>- If false, it is possible to deliver mail to the address."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the organization's functional state and controls that impact its suitability for various usage purposes."
+								},
+								"primaryName": {
+									"type": "string",
+									"nullable": true,
+									"example": "GORMAN MANUFACTURING COMPANY, INC.",
+									"description": "Single name by which the organization is primarily known or identified."
+								},
+								"tradeStyleNames": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the names that the entity trades under for commercial purposes although its registered legal name used for contracts and other formal situations may be another name.<br/><br/>NOTE: tradeStyleNames will be returned only when customer given input matches against tradestyle name.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"name": {
+												"type": "string",
+												"nullable": true,
+												"maxLength": 100,
+												"example": "Alternate Company Name",
+												"description": "The name that the entity trades under for commercial purposes although its registered legal name used for contracts and other formal situations may be another name.<br/><br/>NOTE: tradeStyleNames will be returned only when customer given input matches against trade style name."
+											},
+											"priority": {
+												"type": "integer",
+												"nullable": true,
+												"example": 1,
+												"description": "A numeric value used to identify the relative importance of a Trade Style Name compared to other Trade Style Names. The lower the numeric value the earlier the data is displayed (i.e. 1 indicates the most important name, 2 the second most important etc...)"
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"telephone": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the Telephone contact information used for voice communication with the organization.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"telephoneNumber": {
+												"type": "string",
+												"nullable": true,
+												"example": "6505550000",
+												"description": "The primary voice telephone number for the business, when dialing domestically. The National Telephone Number is created by combining the Domestic Area Code and the Local Number.<br/><br/>A Domestic Area Code is a series of numbers that must be prefixed before dialing a telephone number in another local area. National telecommunication authorities use various formats and dialing rules for area codes. Also known as City Code.<br/><br/>A Local Number is a series of numbers that represents a specific telephone line."
+											},
+											"isUnreachable": {
+												"type": "boolean",
+												"nullable": true,
+												"example": true,
+												"description": "Indicates whether the telephone number can be connected to successfully.<br/><br/>- If true, connection to the telephone number is unsuccessful.<br/>- If false, connection to the telephone number is successful."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"websiteAddress": {
+									"type": "array",
+									"nullable": true,
+									"description": "DO NOT USE. This element is deprecated.<br/><br/>The details of the internet URLs used for online information and communication with the Organization.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"url": {
+												"type": "string",
+												"nullable": true,
+												"maxLength": 255,
+												"example": "http://www.gorman.com",
+												"description": "DO NOT USE. This element is deprecated.<br/><br/>The Internet URL (Uniform Resource Locator) that uniquely identifies the proprietary website of the Organization or the website preferred by the Organization that gives more information on the entity."
+											},
+											"domainName": {
+												"type": "string",
+												"nullable": true,
+												"maxLength": 150,
+												"example": "gorman.com",
+												"description": "DO NOT USE. This element is deprecated.<br/><br/>A unique name used to identify the website of the Organization that serves as an address to access that website."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"primaryAddress": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"addressCountry": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"isoAlpha2Code": {
+													"type": "string",
+													"nullable": true,
+													"example": "US",
+													"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region for this address of the organization."
+												},
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "United States",
+													"description": "The country or region for this address of the organization.<br/>Refer to Reference code table \"ISOCountry: ISO Country Codes\" for all possible values."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the country or region for this address of the organization"
+										},
+										"addressLocality": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"maxLength": 50,
+													"example": "SAN FRANCISCO",
+													"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+										},
+										"addressRegion": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "California",
+													"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+												},
+												"abbreviatedName": {
+													"type": "string",
+													"nullable": true,
+													"minLength": 2,
+													"maxLength": 2,
+													"example": "CA",
+													"description": "The shortened name of the geographical area for this address of the organization. For example NJ for the US State New Jersey within Country United States."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+										},
+										"postalCode": {
+											"type": "string",
+											"nullable": true,
+											"maxLength": 10,
+											"example": "941109999",
+											"description": "The postal code for this address of the organization.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+										},
+										"postalCodeExtension": {
+											"type": "string",
+											"nullable": true,
+											"maxLength": 10,
+											"example": "9999",
+											"description": "An extension to the postal code that identifies a street or building within the geographic area covered by the Postal Code."
+										},
+										"streetAddress": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"line1": {
+													"type": "string",
+													"nullable": true,
+													"maxLength": 70,
+													"example": "492 KOLLER ST",
+													"description": "The first line of the address where the entity is located.<br/><br/>The first line of this address of the organization. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+												},
+												"line2": {
+													"type": "string",
+													"nullable": true,
+													"example": "Suite 100",
+													"description": "The second line of this address of the organization.<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the street address for this address of the organization."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the Primary Address at which the organization is located or conducts operations."
+								},
+								"mailingAddress": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"addressCountry": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"isoAlpha2Code": {
+													"type": "string",
+													"nullable": true,
+													"example": "US",
+													"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region for this address of the organization."
+												},
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "United States",
+													"description": "The country or region for this address of the organization.<br/>Refer to Reference code table \"ISOCountry: ISO Country Codes\" for all possible values."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the country or region for this address of the organization."
+										},
+										"addressLocality": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"maxLength": 50,
+													"example": "SAN FRANCISCO",
+													"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The name of the locality for this address of the organization. Locality defined as a district population cluster. City, town, township, village, borough etc."
+										},
+										"addressRegion": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"name": {
+													"type": "string",
+													"nullable": true,
+													"example": "California",
+													"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+												},
+												"abbreviatedName": {
+													"type": "string",
+													"nullable": true,
+													"minLength": 2,
+													"maxLength": 2,
+													"example": "CA",
+													"description": "The shortened name of the geographical area for this address of the organization. For example NJ for the US State New Jersey within Country United States."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The name of the geographical area for this address of the organization. For Example New Jersey."
+										},
+										"postalCode": {
+											"type": "string",
+											"nullable": true,
+											"maxLength": 10,
+											"example": "941109999",
+											"description": "The postal code for this address of the organization.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+										},
+										"postalCodeExtension": {
+											"type": "string",
+											"nullable": true,
+											"maxLength": 10,
+											"example": "9999",
+											"description": "An extension to the postal code that identifies a street or building within the geographic area covered by the Postal Code."
+										},
+										"streetAddress": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"line1": {
+													"type": "string",
+													"nullable": true,
+													"maxLength": 70,
+													"example": "492 KOLLER ST",
+													"description": "The first line of the address where the entity is located.<br/><br/>The first line of this address of the organization. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+												},
+												"line2": {
+													"type": "string",
+													"nullable": true,
+													"example": "Suite 100",
+													"description": "The second line of this address of the organization.<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the street address for this address of the organization."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the address used by the entity for mailing purposes."
+								},
+								"registrationNumbers": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the organization's identifiers issued by a recognized external authority to uniquely identify subjects. The issuing authority may be a Registration Authority, Government Department or Commercial Enterprise (e.g., Chamber of Commerce numbers, VAT numbers).",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"registrationNumber": {
+												"type": "string",
+												"nullable": true,
+												"example": "12-3456789",
+												"description": "The number or alphanumeric value assigned by a recognized external authority that either uniquely identifies or helps to identify the organization."
+											},
+											"typeDescription": {
+												"type": "string",
+												"nullable": true,
+												"example": "Federal Taxpayer Identification Number (US)",
+												"description": "The official name of the organization identifier assigned by a recognized external authority (e.g.. Australian Company Number, Federal Taxpayer Identification Number, Value Added Tax Number).<br/>Refer to Reference code table \"REGN_CD <br/>/s:Envelope/s:Body/EMF1/EMF1MSGSRSV1/LOOKUPRS/LOOKUPRSCOMPANY/REGN_CD\" for all possible values."
+											},
+											"typeDnBCode": {
+												"type": "integer",
+												"nullable": true,
+												"example": 6863,
+												"description": "A unique code assigned by Dun & Bradstreet to identify the type of organization identifier. For example, 2541 stands for company number issued by the UK Companies House.<br/>Refer to Reference code table \"7 [Registration Number Type]\" for all possible values."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"mostSeniorPrincipals": {
+									"type": "array",
+									"nullable": true,
+									"description": "The person identified as a highest ranking key stakeholder of a business or organization by the local registry or other official sources. A key stakeholder can be a natural person or an organization. Only one record should be classified as the \"most senior principal\".",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"fullName": {
+												"type": "string",
+												"nullable": true,
+												"maxLength": 120,
+												"example": "Leslie Ann Smith",
+												"description": "The highest ranking key stakeholder's given and surname in addition to the middle name and name suffix (when available) listed on one field if the key stakeholder is an individual. This will be submitted in the appropriate format for the local country. If the highest ranking key stakeholder is an organization, the name of the organization will be populated in the full name field."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"isStandalone": {
+									"type": "boolean",
+									"nullable": true,
+									"example": false,
+									"description": "Indicates if the entity is a member of a legal family tree.<br/><br/>- If true, indicates that the entity is not a member of a legal family tree. This means it cannot play any family tree role and corporateLinkage will not be present.<br/>- If false, indicates that the entity is a member of a legal family tree. The roles it plays is indicated by Family Tree Member Roles played."
+								},
+								"corporateLinkage": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"familytreeRolesPlayed": {
+											"type": "array",
+											"nullable": true,
+											"description": "The details of the roles the entity plays as a member of an ownership structured family tree.<br/><br/>Note : Max 1 value will appear.",
+											"items": {
+												"type": "object",
+												"nullable": true,
+												"properties": {
+													"description": {
+														"type": "string",
+														"nullable": true,
+														"example": "Parent/Headquarters",
+														"description": "The role the entity plays as a member of an ownership structured family tree (e.g., a branch, division, a parent, headquarters, subsidiary)."
+													},
+													"dnbCode": {
+														"type": "integer",
+														"nullable": true,
+														"enum": [
+															9140,
+															9141,
+															9159,
+															12769
+														],
+														"example": 9141,
+														"description": "A unique code assigned by Dun & Bradstreet to identify describing family tree role.<br/><br/>Possible Values:<br/>9140 - Branch/Division<br/>9141 - Parent/Headquarters<br/>9159 - Subsidiary<br/>12769 - Branch<br/>Refer to Reference code table \"202 [Family Tree Role]\" for all possible values."
+													}
+												},
+												"additionalProperties": true
+											}
+										}
+									},
+									"additionalProperties": true,
+									"description": "Details of organization to organization relationships based on majority ownership or control (>50%). There are two types of relationships, branch/division to Headquarter and Subsidiary to Parent."
+								}
+							},
+							"additionalProperties": true,
+							"description": "The details of the entity."
+						},
+						"matchQualityInformation": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"confidenceCode": {
+									"type": "integer",
+									"nullable": true,
+									"example": 6,
+									"description": "A numeric value from 1 (low) up to 10 (high) indicating the level of certainty at which this possible candidate was included in this result set."
+								},
+								"matchGrade": {
+									"type": "string",
+									"nullable": true,
+									"minLength": 11,
+									"maxLength": 11,
+									"example": "AZZZZZZZFZZ",
+									"description": "The compound rating that comprises one rating per type of data scored by a match engine.<br/><br/>For example, in AABZBAAAFBZ the \"A\" in the 1st position means that the Name scored between 80-100 and the \"A\" in the 2nd position means that the Street Number had to score exactly 100.<br/><br/>For more details, please see the Identity Resolution guide."
+								},
+								"matchGradeComponentsCount": {
+									"type": "integer",
+									"nullable": true,
+									"example": 11,
+									"description": "The number of constituent parts that were used in the calculation of the Match Grade."
+								},
+								"matchGradeComponents": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the components measured by the match engine.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"componentType": {
+												"type": "string",
+												"nullable": true,
+												"example": "Name",
+												"description": "The component (e.g., Name, Street Number) of the Match Grade that was measured by the match engine."
+											},
+											"componentRating": {
+												"type": "string",
+												"nullable": true,
+												"example": "A",
+												"description": "The quality of the match result on this component. The rating is based on a scoring system."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"matchDataProfile": {
+									"type": "string",
+									"nullable": true,
+									"example": "0000000000989800000000009898",
+									"description": "The information that the matching process used to arrive at a match in addition to the application's business rules and parameters specified by the requestor.<br/><br/>This is a 28-byte string consisting of 14 components of 2 bytes each.<br/><br/>The 14 components are, in order, Name, Street Number, Street Name, Town Name, Territory Name, P.O. Box, Telephone, Post Code, D-U-N-S Number, Industry Code, Geographical Density, Location Uniqueness, Registration Number and URL."
+								},
+								"matchDataProfileComponentsCount": {
+									"type": "integer",
+									"nullable": true,
+									"example": 14,
+									"description": "The number of constituent parts (e.g., Name, Street Number) that were used in the calculation of the Match Data Profile."
+								},
+								"matchDataProfileComponents": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the constituent parts (e.g., Name, Street Number) that were used in the calculation of the Match Data Profile.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"componentType": {
+												"type": "string",
+												"nullable": true,
+												"example": "Name",
+												"description": "The specific component type used."
+											},
+											"componentValue": {
+												"type": "string",
+												"nullable": true,
+												"example": "False",
+												"description": "The value of the component described in Match Data Profile Component Type."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"nameMatchScore": {
+									"type": "number",
+									"nullable": true,
+									"example": 85.5,
+									"description": "A number from -1 to 100 (including decimals) that indicates the detailed level of match on the name of the matched candidate.<br/><br/>- 0 indicates no match.<br/>- 100 indicates most accurate match.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+								}
+							},
+							"additionalProperties": true,
+							"description": "The details of the parameters and components assessed by the Match engine."
+						}
+					},
+					"additionalProperties": true
+				}
+			},
+			"cleanseAndStandardizeInformation": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"standardizedName": {
+						"type": "string",
+						"nullable": true,
+						"maxLength": 255,
+						"example": "STANDARD COMPANY",
+						"description": "The standardized name of the entity."
+					},
+					"standardizedAddress": {
+						"type": "object",
+						"nullable": true,
+						"properties": {
+							"addressCountry": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"isoAlpha2Code": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 10,
+										"example": "AR",
+										"description": "The standardized country code."
+									},
+									"name": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 255,
+										"example": "ARGENTINA",
+										"description": "The standardized Address Country/Market name."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The details of the standardized Address Country/Market."
+							},
+							"addressLocality": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"name": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 255,
+										"example": "BUENOS AIRES",
+										"description": "The standardized address locality name."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The details of the standardized address locality."
+							},
+							"addressRegion": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"name": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 255,
+										"example": "CIUDAD DE BUENOS AIRES",
+										"description": "The standardized address region name."
+									},
+									"abbreviatedName": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 5,
+										"example": "DF",
+										"description": "The standardized abbreviated region name."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The details of the standardized address region."
+							},
+							"addressCounty": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"name": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 50,
+										"example": "SOME COUNTY",
+										"description": "The standardized address county name."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The details of the standardized address county."
+							},
+							"postalCode": {
+								"type": "string",
+								"nullable": true,
+								"maxLength": 10,
+								"example": "750802686",
+								"description": "The standardized address postal code."
+							},
+							"postalCodeExtension": {
+								"type": "string",
+								"nullable": true,
+								"maxLength": 4,
+								"example": "1378",
+								"description": "The standardized address postal code extension."
+							},
+							"streetAddress": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"line1": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 255,
+										"example": "CALLEJUELA 508",
+										"description": "The standardized street address line 1."
+									},
+									"line2": {
+										"type": "string",
+										"nullable": true,
+										"maxLength": 255,
+										"example": "LINE TWO",
+										"description": "The standardized street address line 2."
+									}
+								},
+								"additionalProperties": true,
+								"description": "The details of the standardized street address."
+							},
+							"deliveryPointValidationStatus": {
+								"type": "string",
+								"nullable": true,
+								"example": "No DPV Address",
+								"description": "Indicates if mail can be delivered to this address.<br/><br/>Possible values; more details on these codes and indicators can be obtained through the US Postal Service:<br/><br/>- Delivery Point Validated: This is equal to DSF Deliverability Indicator #1.<br/><br/>- No DPV: Address is invalid and may be undeliverable. It might however, qualify for a ZIP+4. This is equal to DSF Deliverability Indicator #4 or higher or X.<br/><br/>- DPV STE Bad: Street address is valid, but the submitted secondary address details (e.g., suite, room, floor or apartment number) are incorrect. This address is possibly deliverable, at the letter carrier's option. This is equal to DSF Deliverability Indicator #2.<br/><br/>- Missing STE: Street address is valid, but the secondary address details (e.g., suite, room, floor or apartment number) are missing. This address is possibly deliverable, at the letter carrier's option.<br/><br/>- Invalid Address: Address is invalid, undeliverable, and could not be identified by DPV. This is a fictitious address on the DPV file designed to identify mis-use of USPS data. Contact your DB rep.<br/><br/>- No DPV Address: DPV cannot categorize the input address."
+							},
+							"deliveryPointValidationCMRAValue": {
+								"type": "string",
+								"nullable": true,
+								"example": "No DPV Address",
+								"description": "Indicates if this address is valid Commercial Mail Receiving Agency (CMRA). A CMRA is a private business that accepts mail delivery from the Postal Service for others (addressee), holds it for pickup (in most cases a private mailbox (PMB\") or re-mails it to another address with payment of new postage.<br/><br/>- Delivery Point Validated: The address is a valid CRMA.<br/>- Invalid Address: Address is invalid, undeliverable, and could not be identified by DPV. This is a fictitious address on the DPV file designed to identify mis-use of USPS data. Contact your DB rep.<br/>- No DPV: Address is invalid and may be undeliverable.<br/>- No DPV Address: DPV cannot categorize the input address."
+							},
+							"isInexactAddress": {
+								"type": "boolean",
+								"nullable": true,
+								"example": true,
+								"description": "Indicates if this address is strictly accurate or precise.<br/><br/>- If true, the address is not strictly accurate or precise.<br/>- If false, the address is strictly accurate or precise; however as this is the assumed condition there is no requirement to create this tag to represent this fact."
+							},
+							"addressType": {
+								"type": "string",
+								"nullable": true,
+								"enum": [
+									"Firm",
+									"General delivery",
+									"High Rise",
+									"Military",
+									"Post office box",
+									"Rural or Highway Route",
+									"Street",
+									"Unknown"
+								],
+								"example": "Street",
+								"description": "Indicates if there is a business at this address.<br/><br/>Possible Values:<br/>- Firm: There is a business at this address; it could be a residential location with business signage.<br/>- General delivery: The address of the post office where the entity picks up mail. It is not where the entity is located.<br/>- High Rise: Apartment or office building. The USPS defines a High Rise as any location with more than 4 delivery points.<br/>- Military - APO/FPO addresses: The address is an entry point into the military postal system, which delivers to the recipient anywhere in the world. The recipient is not actually at the address.<br/>- Post office box: Address is for a box at a Post Office location.<br/>- Rural or Highway Route: This address is a stop on a route; it is not a physical location.<br/>- Street: A physical location that is not a high-rise.<br/>- Unknown: Address cannot be categorized. This is not a negative. Many delivery points on the DSF file, which is where all these designations come from, have no delivery type categorization. Carriers manually submit these categories."
+							}
+						},
+						"additionalProperties": true,
+						"description": "The details of the standardized address of the entity."
+					}
+				},
+				"additionalProperties": true,
+				"description": "The details of the standardized values used for industry needs and effective identification.<br/><br/>Note: This parameter is not applicable for Multi-Process High-Volume Match."
+			}
+		}
+	},
+	"security": [
+		{
+			"bearerAuth": []
+		}
+	]
+}
