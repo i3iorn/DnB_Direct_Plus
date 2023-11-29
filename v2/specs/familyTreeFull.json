@@ -1,0 +1,1225 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Full Family Tree",
+		"description": "Full Family Tree provides the ability to get a full view of the linkage associations for the specified D-U-N-S Number. Linkage occurs when one business location has financial and legal responsibility for another business location.\n\nData Coverage: Global\nNote: This API is available as part of \"Hierarchies & Connections Full Family Tree\" Side Blocks.",
+		"version": "v1"
+	},
+	"servers": [
+		{
+			"url": "https://plus.dnb.com",
+			"description": "Production endpoint"
+		}
+	],
+	"paths": {
+		"/v1/familyTree/{duns}": {
+			"description": "Full Family Tree provides the ability to get a full view of the linkage associations for the specified D-U-N-S Number. Linkage occurs when one business location has financial and legal responsibility for another business location.\n\nData Coverage: Global\nNote: This API is available as part of \"Hierarchies & Connections Full Family Tree\" Side Blocks.",
+			"x-DNB-ID": "familyTreeFull",
+			"x-DNB-Name": "Full Family Tree",
+			"get": {
+				"description": "Full Family Tree provides the ability to get a full view of the linkage associations for the specified D-U-N-S Number. Linkage occurs when one business location has financial and legal responsibility for another business location.\n\nData Coverage: Global\nNote: This API is available as part of \"Hierarchies & Connections Full Family Tree\" Side Blocks.",
+				"summary": "Full Family Tree",
+				"operationId": "familyTreeFull",
+				"x-monitoring": "Available. Please refer <a href=\"/html/guides/Monitor/DataProducts.html\" target=\"_blank\">guide</a> for details.",
+				"x-monitoring-pdf": "Available. Please refer guide for details.",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": true,
+						"description": "The access token provided by authentication.",
+						"example": "Bearer alphanumerictoken",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "duns",
+						"in": "path",
+						"required": true,
+						"description": "A 9-character numeric string identifying the entity by its Dun & Bradstreet D-U-N-S number.",
+						"example": "804735132",
+						"schema": {
+							"type": "string",
+							"maxLength": 9
+						}
+					},
+					{
+						"name": "page[size]",
+						"in": "query",
+						"required": false,
+						"description": "The number of results to return in a single page.<br/><br/>Valid values: Integers from 1 to 1000.<br/>Default: 1000<br/><br/>The combination of page[size] and page[number] cannot exceed the number of results found.",
+						"example": 500,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "page[number]",
+						"in": "query",
+						"required": false,
+						"description": "Search results can be paginated; this attribute specifies which page is to be returned.<br/><br/>The combination of page[size] and page[number] cannot exceed the number of results found.<br/><br/>The maximum value depends on pageSize. A maximum of 350000 results can be returned. So, for example, if pageSize is 100, the maximum pageNumber is 3500; if pageSize is 500, the maximum pageNumber is 700.",
+						"example": 2,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "exclusionCriteria",
+						"in": "query",
+						"required": false,
+						"description": "Provides the ability to exclude entities based on several properties.<br/><br/>Values:<br/>* Branches",
+						"example": "Branches",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "customerReference",
+						"in": "query",
+						"required": false,
+						"description": "Up to 240 characters for a reference string to be linked to the request in order to support subsequent order reconciliation.",
+						"example": "customer reference text",
+						"schema": {
+							"type": "string",
+							"maxLength": 240
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"transactionDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"transactionID": {
+													"type": "string",
+													"nullable": true,
+													"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+													"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+												},
+												"transactionTimestamp": {
+													"type": "string",
+													"nullable": true,
+													"example": "2017-02-21T17:46:19.839Z",
+													"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+												},
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US\t",
+													"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+												},
+												"serviceVersion": {
+													"type": "string",
+													"nullable": true,
+													"example": "1",
+													"description": "The product version number provided in the request."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The information used to process this request.<br/>"
+										},
+										"error": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"errorCode": {
+													"type": "string",
+													"nullable": true,
+													"example": "10002",
+													"description": "A number assigned by D&B which uniquely identifies the reason for failure of this request."
+												},
+												"errorMessage": {
+													"type": "string",
+													"nullable": true,
+													"example": "Invalid Parameters",
+													"description": "An explanatory text providing more details about the reason for failure of this request."
+												},
+												"errorDetails": {
+													"type": "array",
+													"nullable": true,
+													"description": "Records the detailed failures resulted out of this transaction.",
+													"items": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"parameter": {
+																"type": "string",
+																"nullable": true,
+																"example": "abc",
+																"description": "The request parameter on which the error was identified."
+															},
+															"errors": {
+																"type": "object",
+																"nullable": true,
+																"properties": {},
+																"additionalProperties": true,
+																"description": "Records the actual error identified on the request parameter."
+															},
+															"code": {
+																"type": "string",
+																"nullable": true,
+																"description": "A number assigned by Dun & Bradstreet which uniquely identifies a reason for failure of this request parameter."
+															},
+															"description": {
+																"type": "string",
+																"nullable": true,
+																"example": "Request missing required element",
+																"description": "Records the actual error identified on the request parameter."
+															}
+														},
+														"additionalProperties": true
+													}
+												}
+											},
+											"additionalProperties": true,
+											"description": "Records the failures resulted out of this transaction. This section is created only when the customer request was not fulfilled due to system failures, incorrect or incomplete request parameters etc.,"
+										},
+										"inquiryDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"duns": {
+													"type": "string",
+													"nullable": true,
+													"example": "804735132",
+													"description": "The D-U-N-S number provided in the request."
+												},
+												"page[size]": {
+													"type": "integer",
+													"nullable": true,
+													"example": 500,
+													"description": "The number of results to be returned per page in the response.<br/>"
+												},
+												"page[number]": {
+													"type": "integer",
+													"nullable": true,
+													"example": 2,
+													"description": "The page number provided in the request.<br/>"
+												},
+												"exclusionCriteria": {
+													"type": "string",
+													"nullable": true,
+													"example": "Branches",
+													"description": "The exclusion criteria provided in the request.<br/>"
+												},
+												"customerReference": {
+													"type": "string",
+													"nullable": true,
+													"example": "customer reference text",
+													"description": "A reference string provided by the customer for this particular transaction."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the input data provided.<br/>"
+										},
+										"globalUltimateDuns": {
+											"type": "string",
+											"nullable": true,
+											"example": "804735132",
+											"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+										},
+										"globalUltimateFamilyTreeMembersCount": {
+											"type": "integer",
+											"nullable": true,
+											"example": 9000,
+											"description": "The total number of entities in the entity's Family tree starting from Global Ultimate."
+										},
+										"branchesExcludedMembersCount": {
+											"type": "integer",
+											"nullable": true,
+											"example": 2000,
+											"description": "The number of links, excluding branch entities, in the upward and downward directions of the entire Family tree to which the subject entity belongs, starting from Global Ultimate.<br/>"
+										},
+										"familyTreeMembers": {
+											"type": "array",
+											"nullable": true,
+											"description": "The details of the entity's family tree.<br/>",
+											"items": {
+												"type": "object",
+												"nullable": true,
+												"properties": {
+													"duns": {
+														"type": "string",
+														"nullable": true,
+														"example": "804735132",
+														"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®).<br/>"
+													},
+													"dunsControlStatus": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"isMarketable": {
+																"type": "boolean",
+																"nullable": true,
+																"example": true,
+																"description": "Indicates whether the data on the entity satisfies Dun & Bradstreet's marketability rules for Sales & Marketing Solutions products.<br/><br/>- If true, the entity data satisfies the marketability rules.<br/>- If false, the entity data does not satisfy the marketability rules."
+															}
+														},
+														"additionalProperties": true,
+														"description": "The details of the organization's functional state and controls that impact its suitability for various usage purposes.<br/>"
+													},
+													"primaryName": {
+														"type": "string",
+														"nullable": true,
+														"example": "GORMAN MANUFACTURING COMPANY, INC.",
+														"description": "Single name by which the organization is primarily known or identified."
+													},
+													"tradeStyleNames": {
+														"type": "array",
+														"nullable": true,
+														"description": "The details of the names the organization trades under for commercial purposes<br/>A 'trading style' or 'trading as name' is a name a business chooses to use which is different from their registered company name.<br/>For example D&B is a trading style of Dun & Bradstreet Ltd. It is what the business chooses to call itself for marketing purposes.",
+														"items": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"name": {
+																	"type": "string",
+																	"nullable": true,
+																	"example": "\tAlternate Company Name",
+																	"description": "The names the organization trades under for commercial purposes<br/>A 'trading style' or 'trading as name' is a name a business chooses to use which is different from their registered company name.<br/>For example D&B is a trading style of Dun & Bradstreet Ltd. It is what the business chooses to call itself for marketing purposes."
+																},
+																"priority": {
+																	"type": "integer",
+																	"nullable": true,
+																	"example": 1,
+																	"description": "A numeric value used to identify the relative importance of a Trade Style Name compared to other Trade Style Names. The lower the numeric value the earlier the data is displayed (i.e. 1 indicates the most important name, 2 the second most important etc...)"
+																}
+															},
+															"additionalProperties": true
+														}
+													},
+													"primaryAddress": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"addressCountry": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"name": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "United States",
+																		"description": "The Country or Region where the organization's Primary Address is located or conducts operations ."
+																	},
+																	"isoAlpha2Code": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "US",
+																		"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region where the organization's Primary address is located or conducts operations ."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the country or region where the address of the organization is located or conducts operations."
+															},
+															"addressLocality": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"name": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "SAN FRANCISCO",
+																		"description": "The name of the locality where the organization's Primary Address is located or conducts operations. Locality defined as a district population cluster. City, town, township, village, borough etc."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The name of the locality where the organization's Primary Address is located or conducts operations. Locality defined as a district population cluster. City, town, township, village, borough etc."
+															},
+															"addressRegion": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"name": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "California",
+																		"description": "The name of the geographical area where the organization's Primary Address is located or conducts operations. For Example New Jersey."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The name of the geographical area where the organization's Primary Address is located or conducts operations. For Example New Jersey."
+															},
+															"addressCounty": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"name": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "SAN MATEO",
+																		"description": "The name of the geographical area of a Country or Region where the organization's address is located or conducts operations.<br/><br/>Countries subdivide their geography into smaller sub divisions. County is an example of a commonly used subdivision, often found in the UK."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the geographical area of a Country or Region where the organization's Primary Address is located or conducts operations. Countries divide their geography into smaller sub divisions.<br/><br/>County is an example of a commonly used subdivision. Often found in UK."
+															},
+															"postalCode": {
+																"type": "string",
+																"nullable": true,
+																"example": "941109999\t",
+																"description": "The postal code of the organization's Primary Address.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+															},
+															"streetAddress": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"line1": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "492 KOLLER ST",
+																		"description": "The first line of the address where the entity is located.<br/><br/>The first line of the Primary Address where the organization is located or conducts operations. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																	},
+																	"line2": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "Suite 100",
+																		"description": "The second line of the Primary Address where the organization is located or conducts operations<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the street address where the organization's Primary Address is located."
+															}
+														},
+														"additionalProperties": true,
+														"description": "The details of the Primary Address at which the organization is located or conducts operations."
+													},
+													"primaryIndustryCode": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"usSicV4": {
+																"type": "string",
+																"nullable": true,
+																"example": "7323",
+																"description": "The 1987 version of a 4-digit numeric coding system developed by the US Government for the classification of industrial activities to denote the industry in which the entity does most of its business."
+															},
+															"usSicV4Description": {
+																"type": "string",
+																"nullable": true,
+																"example": "Credit reporting services",
+																"description": "The business activity based on the scheme used for the industry code (e.g., 'highway and street construction' is the description of industry code 1611 in the U.S. SIC (Standard Industrial Classification) system)."
+															}
+														},
+														"additionalProperties": true,
+														"description": "The primary activity in which the organization is engaged as defined by the 4 digit 1987 US Standard Industry Classification (SIC). Additional coding schemes may be added in the future."
+													},
+													"startDate": {
+														"type": "string",
+														"nullable": true,
+														"example": "2012-09-03 00:00:00",
+														"description": "The date the entity chooses to claim as its established date.<br/><br/>Note: This date may be different from the Operations Start Date and adheres to ISO 8601 standard.The date an organization originally commenced operations. If the business was formed to acquire or continue the operations of a pre-existing business, then the Start Date may reflect that original start date. The Start Date is not necessarily the date that the subject was registered/incorporated. If a company registered on 25th August 1930 continues business activities established on 18th June 1815 then the start date is the 1815 date."
+													},
+													"numberOfEmployees": {
+														"type": "array",
+														"nullable": true,
+														"description": "The details of the number of individuals engaged by a business for various purposes, e.g., to perform its business operations.<br/>",
+														"items": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"value": {
+																	"type": "integer",
+																	"nullable": true,
+																	"example": 1234,
+																	"description": "The total number of employees used for business operations. Currently only the consolidated employee count is supported i.e. the figure includes all employees who are engaged in the operations of the legal entity (including employees located at branch locations) as well as all employees who are engaged in the operations of every direct descendant in its family tree (based on controlling interest). I.e. Subsidiaries."
+																}
+															},
+															"additionalProperties": true
+														}
+													},
+													"financials": {
+														"type": "array",
+														"nullable": true,
+														"description": "The details of the standardized summary view of the financial results (actual or estimated) for the organization.",
+														"items": {
+															"type": "object",
+															"nullable": true,
+															"properties": {
+																"yearlyRevenues": {
+																	"type": "array",
+																	"nullable": true,
+																	"description": "The details of the total income attributable to product and services sold by an organization annually.",
+																	"items": {
+																		"type": "object",
+																		"nullable": true,
+																		"properties": {
+																			"value": {
+																				"type": "number",
+																				"nullable": true,
+																				"example": 1206954890,
+																				"description": "The monetary value of income received from customers from the sale of the entity's goods and/or services. This is the gross sales minus any returns, rebates/discounts, allowances for damages or shortages, shipping expenses passed on to the customer.<br/><br/>Value is in US Dollars."
+																			}
+																		},
+																		"additionalProperties": true
+																	}
+																}
+															},
+															"additionalProperties": true
+														}
+													},
+													"corporateLinkage": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"familytreeRolesPlayed": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the roles the entity plays as a member of an ownership structured family tree.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"description": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "Parent/Headquarters",
+																			"description": "The role the entity plays as a member of an ownership structured family tree (e.g., a branch, division, a parent, headquarters, subsidiary, global ultimate, domestic ultimate)."
+																		},
+																		"dnbCode": {
+																			"type": "integer",
+																			"nullable": true,
+																			"example": 9141,
+																			"description": "A unique code assigned by Dun & Bradstreet to identify describing family tree role.<br/>Refer to Reference code table \"202 [Family Tree Role]\" for all possible values."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															},
+															"hierarchyLevel": {
+																"type": "integer",
+																"nullable": true,
+																"example": 1,
+																"description": "The number of family-tree levels below the global ultimate the entity is in its corporate hierarchy. The hierarchy level value of the global ultimate will always be 1. Each subsidiary level below the global ultimate is incremented by 1. Branch locations in a family tree will have the same hierarchy code as its associated headquarter."
+															},
+															"parent": {
+																"type": "object",
+																"nullable": true,
+																"properties": {
+																	"duns": {
+																		"type": "string",
+																		"nullable": true,
+																		"example": "804735132",
+																		"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+																	}
+																},
+																"additionalProperties": true,
+																"description": "The details of the entity that owns more than 50% of the subject entity or the entity that operates as the Headquarter of the subject entity."
+															},
+															"children": {
+																"type": "array",
+																"nullable": true,
+																"description": "The details of the entities in this family tree directly associated downwards from the inquired entity.",
+																"items": {
+																	"type": "object",
+																	"nullable": true,
+																	"properties": {
+																		"duns": {
+																			"type": "string",
+																			"nullable": true,
+																			"example": "804735132",
+																			"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+																		}
+																	},
+																	"additionalProperties": true
+																}
+															}
+														},
+														"additionalProperties": true,
+														"description": "Details of organization to organization relationships based on majority ownership or control (>50%). There are two types of relationships, branch/division to Headquarter and Subsidiary to Parent.<br/>"
+													}
+												},
+												"additionalProperties": true
+											}
+										},
+										"links": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"self": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://dnblinktopage.com",
+													"description": "Link to the current page of the results."
+												},
+												"prev": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://dnblinktopage.com",
+													"description": "Link to the previous page of the results."
+												},
+												"next": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://dnblinktopage.com",
+													"description": "Link to the next page of the results."
+												},
+												"first": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://dnblinktopage.com",
+													"description": "Link to the first page of the results."
+												},
+												"last": {
+													"type": "string",
+													"nullable": true,
+													"example": "https://dnblinktopage.com",
+													"description": "Link to the last page of the results"
+												}
+											},
+											"additionalProperties": true,
+											"description": "The links to traverse between pages with search results."
+										}
+									}
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"transactionDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"transactionID": {
+													"type": "string",
+													"nullable": true,
+													"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+													"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+												},
+												"transactionTimestamp": {
+													"type": "string",
+													"nullable": true,
+													"example": "2017-02-21T17:46:19.839Z",
+													"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+												},
+												"inLanguage": {
+													"type": "string",
+													"nullable": true,
+													"example": "en-US\t",
+													"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+												},
+												"serviceVersion": {
+													"type": "string",
+													"nullable": true,
+													"example": "1",
+													"description": "The product version number provided in the request."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The information used to process this request.<br/>"
+										},
+										"error": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"errorCode": {
+													"type": "string",
+													"nullable": true,
+													"example": "10002",
+													"description": "A number assigned by D&B which uniquely identifies the reason for failure of this request."
+												},
+												"errorMessage": {
+													"type": "string",
+													"nullable": true,
+													"example": "Invalid Parameters",
+													"description": "An explanatory text providing more details about the reason for failure of this request."
+												},
+												"errorDetails": {
+													"type": "array",
+													"nullable": true,
+													"description": "Records the detailed failures resulted out of this transaction.",
+													"items": {
+														"type": "object",
+														"nullable": true,
+														"properties": {
+															"parameter": {
+																"type": "string",
+																"nullable": true,
+																"example": "abc",
+																"description": "The request parameter on which the error was identified."
+															},
+															"errors": {
+																"type": "object",
+																"nullable": true,
+																"properties": {},
+																"additionalProperties": true,
+																"description": "Records the actual error identified on the request parameter."
+															},
+															"code": {
+																"type": "string",
+																"nullable": true,
+																"description": "A number assigned by Dun & Bradstreet which uniquely identifies a reason for failure of this request parameter."
+															},
+															"description": {
+																"type": "string",
+																"nullable": true,
+																"example": "Request missing required element",
+																"description": "Records the actual error identified on the request parameter."
+															}
+														},
+														"additionalProperties": true
+													}
+												}
+											},
+											"additionalProperties": true,
+											"description": "Records the failures resulted out of this transaction. This section is created only when the customer request was not fulfilled due to system failures, incorrect or incomplete request parameters etc.,"
+										},
+										"inquiryDetail": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"duns": {
+													"type": "string",
+													"nullable": true,
+													"example": "804735132",
+													"description": "The D-U-N-S number provided in the request."
+												},
+												"page[size]": {
+													"type": "integer",
+													"nullable": true,
+													"example": 500,
+													"description": "The number of results to be returned per page in the response.<br/>"
+												},
+												"page[number]": {
+													"type": "integer",
+													"nullable": true,
+													"example": 2,
+													"description": "The page number provided in the request.<br/>"
+												},
+												"exclusionCriteria": {
+													"type": "string",
+													"nullable": true,
+													"example": "Branches",
+													"description": "The exclusion criteria provided in the request.<br/>"
+												},
+												"customerReference": {
+													"type": "string",
+													"nullable": true,
+													"example": "customer reference text",
+													"description": "A reference string provided by the customer for this particular transaction."
+												}
+											},
+											"additionalProperties": true,
+											"description": "The details of the input data provided.<br/>"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		},
+		"schemas": {
+			"transactionDetail": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"transactionID": {
+						"type": "string",
+						"nullable": true,
+						"example": "rlh-hi9puyoijk-jop8u-kd-d-1",
+						"description": "A value assigned by the Dun & Bradstreet application to uniquely identify this request."
+					},
+					"transactionTimestamp": {
+						"type": "string",
+						"nullable": true,
+						"example": "2017-02-21T17:46:19.839Z",
+						"description": "The date and time, in ISO 8601 UTC Z standard, when this response was created."
+					},
+					"inLanguage": {
+						"type": "string",
+						"nullable": true,
+						"example": "en-US\t",
+						"description": "An IETF BCP 47 code value that defines the language in which this product was rendered."
+					},
+					"serviceVersion": {
+						"type": "string",
+						"nullable": true,
+						"example": "1",
+						"description": "The product version number provided in the request."
+					}
+				},
+				"additionalProperties": true,
+				"description": "The information used to process this request.<br/>"
+			},
+			"error": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"errorCode": {
+						"type": "string",
+						"nullable": true,
+						"example": "10002",
+						"description": "A number assigned by D&B which uniquely identifies the reason for failure of this request."
+					},
+					"errorMessage": {
+						"type": "string",
+						"nullable": true,
+						"example": "Invalid Parameters",
+						"description": "An explanatory text providing more details about the reason for failure of this request."
+					},
+					"errorDetails": {
+						"type": "array",
+						"nullable": true,
+						"description": "Records the detailed failures resulted out of this transaction.",
+						"items": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"parameter": {
+									"type": "string",
+									"nullable": true,
+									"example": "abc",
+									"description": "The request parameter on which the error was identified."
+								},
+								"errors": {
+									"type": "object",
+									"nullable": true,
+									"properties": {},
+									"additionalProperties": true,
+									"description": "Records the actual error identified on the request parameter."
+								},
+								"code": {
+									"type": "string",
+									"nullable": true,
+									"description": "A number assigned by Dun & Bradstreet which uniquely identifies a reason for failure of this request parameter."
+								},
+								"description": {
+									"type": "string",
+									"nullable": true,
+									"example": "Request missing required element",
+									"description": "Records the actual error identified on the request parameter."
+								}
+							},
+							"additionalProperties": true
+						}
+					}
+				},
+				"additionalProperties": true,
+				"description": "Records the failures resulted out of this transaction. This section is created only when the customer request was not fulfilled due to system failures, incorrect or incomplete request parameters etc.,"
+			},
+			"inquiryDetail": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"duns": {
+						"type": "string",
+						"nullable": true,
+						"example": "804735132",
+						"description": "The D-U-N-S number provided in the request."
+					},
+					"page[size]": {
+						"type": "integer",
+						"nullable": true,
+						"example": 500,
+						"description": "The number of results to be returned per page in the response.<br/>"
+					},
+					"page[number]": {
+						"type": "integer",
+						"nullable": true,
+						"example": 2,
+						"description": "The page number provided in the request.<br/>"
+					},
+					"exclusionCriteria": {
+						"type": "string",
+						"nullable": true,
+						"example": "Branches",
+						"description": "The exclusion criteria provided in the request.<br/>"
+					},
+					"customerReference": {
+						"type": "string",
+						"nullable": true,
+						"example": "customer reference text",
+						"description": "A reference string provided by the customer for this particular transaction."
+					}
+				},
+				"additionalProperties": true,
+				"description": "The details of the input data provided.<br/>"
+			},
+			"globalUltimateDuns": {
+				"type": "string",
+				"nullable": true,
+				"example": "804735132",
+				"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+			},
+			"globalUltimateFamilyTreeMembersCount": {
+				"type": "integer",
+				"nullable": true,
+				"example": 9000,
+				"description": "The total number of entities in the entity's Family tree starting from Global Ultimate."
+			},
+			"branchesExcludedMembersCount": {
+				"type": "integer",
+				"nullable": true,
+				"example": 2000,
+				"description": "The number of links, excluding branch entities, in the upward and downward directions of the entire Family tree to which the subject entity belongs, starting from Global Ultimate.<br/>"
+			},
+			"familyTreeMembers": {
+				"type": "array",
+				"nullable": true,
+				"description": "The details of the entity's family tree.<br/>",
+				"items": {
+					"type": "object",
+					"nullable": true,
+					"properties": {
+						"duns": {
+							"type": "string",
+							"nullable": true,
+							"example": "804735132",
+							"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®).<br/>"
+						},
+						"dunsControlStatus": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"isMarketable": {
+									"type": "boolean",
+									"nullable": true,
+									"example": true,
+									"description": "Indicates whether the data on the entity satisfies Dun & Bradstreet's marketability rules for Sales & Marketing Solutions products.<br/><br/>- If true, the entity data satisfies the marketability rules.<br/>- If false, the entity data does not satisfy the marketability rules."
+								}
+							},
+							"additionalProperties": true,
+							"description": "The details of the organization's functional state and controls that impact its suitability for various usage purposes.<br/>"
+						},
+						"primaryName": {
+							"type": "string",
+							"nullable": true,
+							"example": "GORMAN MANUFACTURING COMPANY, INC.",
+							"description": "Single name by which the organization is primarily known or identified."
+						},
+						"tradeStyleNames": {
+							"type": "array",
+							"nullable": true,
+							"description": "The details of the names the organization trades under for commercial purposes<br/>A 'trading style' or 'trading as name' is a name a business chooses to use which is different from their registered company name.<br/>For example D&B is a trading style of Dun & Bradstreet Ltd. It is what the business chooses to call itself for marketing purposes.",
+							"items": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"name": {
+										"type": "string",
+										"nullable": true,
+										"example": "\tAlternate Company Name",
+										"description": "The names the organization trades under for commercial purposes<br/>A 'trading style' or 'trading as name' is a name a business chooses to use which is different from their registered company name.<br/>For example D&B is a trading style of Dun & Bradstreet Ltd. It is what the business chooses to call itself for marketing purposes."
+									},
+									"priority": {
+										"type": "integer",
+										"nullable": true,
+										"example": 1,
+										"description": "A numeric value used to identify the relative importance of a Trade Style Name compared to other Trade Style Names. The lower the numeric value the earlier the data is displayed (i.e. 1 indicates the most important name, 2 the second most important etc...)"
+									}
+								},
+								"additionalProperties": true
+							}
+						},
+						"primaryAddress": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"addressCountry": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"name": {
+											"type": "string",
+											"nullable": true,
+											"example": "United States",
+											"description": "The Country or Region where the organization's Primary Address is located or conducts operations ."
+										},
+										"isoAlpha2Code": {
+											"type": "string",
+											"nullable": true,
+											"example": "US",
+											"description": "The 2 letter alpha country code assigned by the International Organization for Standardization (ISO) identifying the Country/Region where the organization's Primary address is located or conducts operations ."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the country or region where the address of the organization is located or conducts operations."
+								},
+								"addressLocality": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"name": {
+											"type": "string",
+											"nullable": true,
+											"example": "SAN FRANCISCO",
+											"description": "The name of the locality where the organization's Primary Address is located or conducts operations. Locality defined as a district population cluster. City, town, township, village, borough etc."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The name of the locality where the organization's Primary Address is located or conducts operations. Locality defined as a district population cluster. City, town, township, village, borough etc."
+								},
+								"addressRegion": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"name": {
+											"type": "string",
+											"nullable": true,
+											"example": "California",
+											"description": "The name of the geographical area where the organization's Primary Address is located or conducts operations. For Example New Jersey."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The name of the geographical area where the organization's Primary Address is located or conducts operations. For Example New Jersey."
+								},
+								"addressCounty": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"name": {
+											"type": "string",
+											"nullable": true,
+											"example": "SAN MATEO",
+											"description": "The name of the geographical area of a Country or Region where the organization's address is located or conducts operations.<br/><br/>Countries subdivide their geography into smaller sub divisions. County is an example of a commonly used subdivision, often found in the UK."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the geographical area of a Country or Region where the organization's Primary Address is located or conducts operations. Countries divide their geography into smaller sub divisions.<br/><br/>County is an example of a commonly used subdivision. Often found in UK."
+								},
+								"postalCode": {
+									"type": "string",
+									"nullable": true,
+									"example": "941109999\t",
+									"description": "The postal code of the organization's Primary Address.<br/><br/>Also known locally in various English-speaking countries throughout the world as a postcode, post code, Eircode, PIN or ZIP Code) is a series of letters or digits or both, sometimes including spaces or punctuation, included in a postal address for the purpose of sorting mail. The code is used by the country's postal authority to identify the address where the organization is located or conducts operations ."
+								},
+								"streetAddress": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"line1": {
+											"type": "string",
+											"nullable": true,
+											"example": "492 KOLLER ST",
+											"description": "The first line of the address where the entity is located.<br/><br/>The first line of the Primary Address where the organization is located or conducts operations. For example The Point in the address<br/><br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+										},
+										"line2": {
+											"type": "string",
+											"nullable": true,
+											"example": "Suite 100",
+											"description": "The second line of the Primary Address where the organization is located or conducts operations<br/>For example 37 North Wharf Road in the address<br/>The Point<br/>37 North Wharf Road<br/>London<br/>W2 1AF"
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the street address where the organization's Primary Address is located."
+								}
+							},
+							"additionalProperties": true,
+							"description": "The details of the Primary Address at which the organization is located or conducts operations."
+						},
+						"primaryIndustryCode": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"usSicV4": {
+									"type": "string",
+									"nullable": true,
+									"example": "7323",
+									"description": "The 1987 version of a 4-digit numeric coding system developed by the US Government for the classification of industrial activities to denote the industry in which the entity does most of its business."
+								},
+								"usSicV4Description": {
+									"type": "string",
+									"nullable": true,
+									"example": "Credit reporting services",
+									"description": "The business activity based on the scheme used for the industry code (e.g., 'highway and street construction' is the description of industry code 1611 in the U.S. SIC (Standard Industrial Classification) system)."
+								}
+							},
+							"additionalProperties": true,
+							"description": "The primary activity in which the organization is engaged as defined by the 4 digit 1987 US Standard Industry Classification (SIC). Additional coding schemes may be added in the future."
+						},
+						"startDate": {
+							"type": "string",
+							"nullable": true,
+							"example": "2012-09-03 00:00:00",
+							"description": "The date the entity chooses to claim as its established date.<br/><br/>Note: This date may be different from the Operations Start Date and adheres to ISO 8601 standard.The date an organization originally commenced operations. If the business was formed to acquire or continue the operations of a pre-existing business, then the Start Date may reflect that original start date. The Start Date is not necessarily the date that the subject was registered/incorporated. If a company registered on 25th August 1930 continues business activities established on 18th June 1815 then the start date is the 1815 date."
+						},
+						"numberOfEmployees": {
+							"type": "array",
+							"nullable": true,
+							"description": "The details of the number of individuals engaged by a business for various purposes, e.g., to perform its business operations.<br/>",
+							"items": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"value": {
+										"type": "integer",
+										"nullable": true,
+										"example": 1234,
+										"description": "The total number of employees used for business operations. Currently only the consolidated employee count is supported i.e. the figure includes all employees who are engaged in the operations of the legal entity (including employees located at branch locations) as well as all employees who are engaged in the operations of every direct descendant in its family tree (based on controlling interest). I.e. Subsidiaries."
+									}
+								},
+								"additionalProperties": true
+							}
+						},
+						"financials": {
+							"type": "array",
+							"nullable": true,
+							"description": "The details of the standardized summary view of the financial results (actual or estimated) for the organization.",
+							"items": {
+								"type": "object",
+								"nullable": true,
+								"properties": {
+									"yearlyRevenues": {
+										"type": "array",
+										"nullable": true,
+										"description": "The details of the total income attributable to product and services sold by an organization annually.",
+										"items": {
+											"type": "object",
+											"nullable": true,
+											"properties": {
+												"value": {
+													"type": "number",
+													"nullable": true,
+													"example": 1206954890,
+													"description": "The monetary value of income received from customers from the sale of the entity's goods and/or services. This is the gross sales minus any returns, rebates/discounts, allowances for damages or shortages, shipping expenses passed on to the customer.<br/><br/>Value is in US Dollars."
+												}
+											},
+											"additionalProperties": true
+										}
+									}
+								},
+								"additionalProperties": true
+							}
+						},
+						"corporateLinkage": {
+							"type": "object",
+							"nullable": true,
+							"properties": {
+								"familytreeRolesPlayed": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the roles the entity plays as a member of an ownership structured family tree.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"description": {
+												"type": "string",
+												"nullable": true,
+												"example": "Parent/Headquarters",
+												"description": "The role the entity plays as a member of an ownership structured family tree (e.g., a branch, division, a parent, headquarters, subsidiary, global ultimate, domestic ultimate)."
+											},
+											"dnbCode": {
+												"type": "integer",
+												"nullable": true,
+												"example": 9141,
+												"description": "A unique code assigned by Dun & Bradstreet to identify describing family tree role.<br/>Refer to Reference code table \"202 [Family Tree Role]\" for all possible values."
+											}
+										},
+										"additionalProperties": true
+									}
+								},
+								"hierarchyLevel": {
+									"type": "integer",
+									"nullable": true,
+									"example": 1,
+									"description": "The number of family-tree levels below the global ultimate the entity is in its corporate hierarchy. The hierarchy level value of the global ultimate will always be 1. Each subsidiary level below the global ultimate is incremented by 1. Branch locations in a family tree will have the same hierarchy code as its associated headquarter."
+								},
+								"parent": {
+									"type": "object",
+									"nullable": true,
+									"properties": {
+										"duns": {
+											"type": "string",
+											"nullable": true,
+											"example": "804735132",
+											"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+										}
+									},
+									"additionalProperties": true,
+									"description": "The details of the entity that owns more than 50% of the subject entity or the entity that operates as the Headquarter of the subject entity."
+								},
+								"children": {
+									"type": "array",
+									"nullable": true,
+									"description": "The details of the entities in this family tree directly associated downwards from the inquired entity.",
+									"items": {
+										"type": "object",
+										"nullable": true,
+										"properties": {
+											"duns": {
+												"type": "string",
+												"nullable": true,
+												"example": "804735132",
+												"description": "The D-U-N-S® Number, a proprietary organizational identifier owned and managed by Dun & Bradstreet Inc, provides unique identification of a subject organization, in accordance with the Data Universal Numbering System (D-U-N-S®)."
+											}
+										},
+										"additionalProperties": true
+									}
+								}
+							},
+							"additionalProperties": true,
+							"description": "Details of organization to organization relationships based on majority ownership or control (>50%). There are two types of relationships, branch/division to Headquarter and Subsidiary to Parent.<br/>"
+						}
+					},
+					"additionalProperties": true
+				}
+			},
+			"links": {
+				"type": "object",
+				"nullable": true,
+				"properties": {
+					"self": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://dnblinktopage.com",
+						"description": "Link to the current page of the results."
+					},
+					"prev": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://dnblinktopage.com",
+						"description": "Link to the previous page of the results."
+					},
+					"next": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://dnblinktopage.com",
+						"description": "Link to the next page of the results."
+					},
+					"first": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://dnblinktopage.com",
+						"description": "Link to the first page of the results."
+					},
+					"last": {
+						"type": "string",
+						"nullable": true,
+						"example": "https://dnblinktopage.com",
+						"description": "Link to the last page of the results"
+					}
+				},
+				"additionalProperties": true,
+				"description": "The links to traverse between pages with search results."
+			}
+		}
+	},
+	"security": [
+		{
+			"bearerAuth": []
+		}
+	]
+}

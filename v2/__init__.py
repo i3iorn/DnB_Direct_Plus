@@ -21,4 +21,4 @@ logging.config.dictConfig(logger_config)
 with open(f'{project_root}/environment.yaml', 'r') as stream:
     config = yaml.safe_load(stream)
 
-API = config.get('credentials').get('personal').get('test')
+API_CREDENTIALS = config.get('credentials')

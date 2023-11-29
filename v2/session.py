@@ -9,19 +9,14 @@ class DirectPlusSession(requests.Session):
     """
     Establish a session with the Direct+ API.
     """
-    def __init__(self, key_64: str):
+    def __init__(self, key_64: str, flags):
         super().__init__()
         self.log = logging.getLogger(__name__)
+        self.key_64 = key_64
         self.log.debug("Initializing Direct+ session.")
 
         self.access_token, self.access_token_expires = self._get_access_token(key_64)
         self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")
-
-        self.log.debug("Setting session headers.")
-        self.headers.update({
-            'accept': "application/json;charset=utf-8",
-            'authorization': f"Bearer {self.access_token}",
-        })
 
     def _get_access_token(self, key_64):
         auth_address = 'https://plus.dnb.com/v2/token'
@@ -32,24 +27,34 @@ class DirectPlusSession(requests.Session):
             'Cache-Control': 'no-cache'
         })
         self.log.debug("Requesting access token.")
-        self.log.debug(f"Headers: {self.headers}")
         self.log.debug(f"Address: {auth_address}")
-        response = self.post(auth_address, json.dumps({
+        response = super().post(auth_address, json={
             "grant_type": "client_credentials"
-        }))
+        })
 
         self.log.debug(f"Response: {response}")
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            self.handle_error(e)
         token = json.loads(response.text)['access_token']
         self.log.debug(f"Access token aquired")
         expires = time() + json.loads(response.text)['expiresIn']
+
+        self.log.debug("Setting session headers.")
+        self.headers.update({
+            'accept': "application/json;charset=utf-8",
+            'authorization': f"Bearer {token}",
+        })
+
         return token, expires
 
-    def handle_error(self, e):
-        self.log.error(f"Request failed with status code {e.response.status_code}")
-        self.log.error(e.response.request.body)
-        self.log.error(e.response.text)
-        raise requests.exceptions.HTTPError from e
+    def get(self, url, **kwargs):
+        if time() > self.access_token_expires:
+            self.access_token, self.access_token_expires = self._get_access_token(self.key_64)
+            self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")
+
+        return super().get(url, **kwargs)
+
+    def post(self, url, data='', **kwargs):
+        if time() > self.access_token_expires:
+            self.access_token, self.access_token_expires = self._get_access_token(self.key_64)
+            self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")
+
+        return super().post(url, **kwargs)

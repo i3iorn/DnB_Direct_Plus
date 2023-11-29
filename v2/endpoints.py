@@ -33,7 +33,12 @@ class Endpoint:
 
     @classmethod
     def add_parameter(cls, name, value):
-        param = [param for param in cls.expected_parameters if param['name'] == name]
+        print(f"Adding parameter '{name}' with value of type '{type(value)}'")
+        try:
+            param = [param for param in cls.expected_parameters if param['name'] == name]
+        except TypeError:
+            raise ValueError(f"Parameter '{name}' not found in expected parameters. Expected parameters: {cls.expected_parameters}")
+
         if len(param) == 0:
             raise ValueError(f"Parameter '{name}' not found in expected parameters. Expected parameters: {cls.expected_parameters}")
         elif len(param) > 1:
@@ -69,13 +74,14 @@ class Endpoint:
                 except ValueError:
                     raise ValueError(f"Parameter '{name}' must be a number.")
 
-            if param.get('minItems', 0) > len(value):
-                raise ValueError(f"Parameter '{name}' must have at least {param['minItems']} items.")
-
-            if param.get('minLength', 0) > len(value):
-                raise ValueError(f"Parameter '{name}' must be at least {param['minLength']} characters long.")
-            if param.get('maxLength', 4092) < len(value):
-                raise ValueError(f"Parameter '{name}' must be at most {param['maxLength']} characters long.")
+            if isinstance(value, list):
+                if param.get('minItems', 0) > len(value):
+                    raise ValueError(f"Parameter '{name}' must have at least {param['minItems']} items.")
+            if isinstance(value, str):
+                if param.get('minLength', 0) > len(value):
+                    raise ValueError(f"Parameter '{name}' must be at least {param['minLength']} characters long.")
+                if param.get('maxLength', 4092) < len(value):
+                    raise ValueError(f"Parameter '{name}' must be at most {param['maxLength']} characters long.")
             if not param.get('nullable', True) and value is None:
                 raise ValueError(f"Parameter '{name}' must not be null.")
             if param.get('items', False):
