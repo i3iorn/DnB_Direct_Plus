@@ -1,6 +1,7 @@
 duns*
 *.log
 custom_jobs/
+cases/
 
 ### Python template
 # Byte-compiled / optimized / DLL files

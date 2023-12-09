@@ -1,2 +1,0 @@
-class EntitlementAccessException(Exception):
-    pass

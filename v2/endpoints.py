@@ -1,3 +1,4 @@
+import json
 import logging
 from dataclasses import dataclass
 from typing import List
@@ -30,67 +31,75 @@ class Endpoint:
         else:
             url = f'{cls.base}{cls.path}'
         return url
+    
+    @classmethod
+    def _validate_parameter(cls, name, value, spec):
+        if spec.get('type') == 'integer':
+            try:
+                int(value)
+            except ValueError:
+                raise ValueError(f"speceter '{name}' must be an integer.")
+        if spec.get('type') == 'string':
+            if not isinstance(value, str):
+                raise ValueError(f"speceter '{name}' must be a string.")
+        if spec.get('type') == 'array':
+            if not isinstance(value, object):
+                raise ValueError(f"speceter '{name}' must be a list.")
+        if spec.get('type') == 'boolean':
+            if not isinstance(value, bool):
+                raise ValueError(f"speceter '{name}' must be a boolean.")
+        if spec.get('type') == 'object':
+            if not isinstance(value, dict):
+                raise ValueError(f"speceter '{name}' must be a dictionary.")
+        if spec.get('type') == 'number':
+            try:
+                float(value)
+            except ValueError:
+                raise ValueError(f"speceter '{name}' must be a number.")
+        if isinstance(value, list):
+            if spec.get('minItems', 0) > len(value):
+                raise ValueError(f"speceter '{name}' must have at least {spec['minItems']} items.")
+        if isinstance(value, str):
+            if spec.get('minLength', 0) > len(value):
+                raise ValueError(f"speceter '{name}' must be at least {spec['minLength']} characters long.")
+            if spec.get('maxLength', 4092) < len(value):
+                raise ValueError(f"speceter '{name}' must be at most {spec['maxLength']} characters long.")
+        if not spec.get('nullable', True) and value is None:
+            raise ValueError(f"speceter '{name}' must not be null.")
+
+    @classmethod
+    def _validate_get_parameters(cls, name, value, spec):
+        for param in spec:
+            if param.get('name') == name:
+                cls._validate_parameter(name, value, param)
+                return {
+                    'name': name,
+                    'in': param.get('in', 'query'),
+                    'value': value,
+                    'required': param.get('required', False),
+                }
+        raise ValueError(f"Parameter '{name}' not found in specification.")
 
     @classmethod
     def add_parameter(cls, name, value):
-        print(f"Adding parameter '{name}' with value of type '{type(value)}'")
-        try:
-            param = [param for param in cls.expected_parameters if param['name'] == name]
-        except TypeError:
-            raise ValueError(f"Parameter '{name}' not found in expected parameters. Expected parameters: {cls.expected_parameters}")
+        spec = cls.expected_parameters
+        if cls.method == 'GET':
+            cls.parameters[name] = cls._validate_get_parameters(name, value, spec)
+        elif cls.method == 'POST':
+            cls.parameters[name] = cls._validate_post_parameters(name, value, spec)
 
-        if len(param) == 0:
-            raise ValueError(f"Parameter '{name}' not found in expected parameters. Expected parameters: {cls.expected_parameters}")
-        elif len(param) > 1:
-            raise ValueError(f"Parameter '{name}' found multiple times in expected parameters.")
-        else:
-            param = param[0]
-            cls.parameters[name] = {
-                'name': name,
-                'value': value,
-                'in': param['in'],
-                'required': param['required'],
-            }
-            if param.get('type') == 'integer':
-                try:
-                    int(value)
-                except ValueError:
-                    raise ValueError(f"Parameter '{name}' must be an integer.")
-            if param.get('type') == 'string':
-                if not isinstance(value, str):
-                    raise ValueError(f"Parameter '{name}' must be a string.")
-            if param.get('type') == 'array':
-                if not isinstance(value, list):
-                    raise ValueError(f"Parameter '{name}' must be a list.")
-            if param.get('type') == 'boolean':
-                if not isinstance(value, bool):
-                    raise ValueError(f"Parameter '{name}' must be a boolean.")
-            if param.get('type') == 'object':
-                if not isinstance(value, dict):
-                    raise ValueError(f"Parameter '{name}' must be a dictionary.")
-            if param.get('type') == 'number':
-                try:
-                    float(value)
-                except ValueError:
-                    raise ValueError(f"Parameter '{name}' must be a number.")
-
-            if isinstance(value, list):
-                if param.get('minItems', 0) > len(value):
-                    raise ValueError(f"Parameter '{name}' must have at least {param['minItems']} items.")
-            if isinstance(value, str):
-                if param.get('minLength', 0) > len(value):
-                    raise ValueError(f"Parameter '{name}' must be at least {param['minLength']} characters long.")
-                if param.get('maxLength', 4092) < len(value):
-                    raise ValueError(f"Parameter '{name}' must be at most {param['maxLength']} characters long.")
-            if not param.get('nullable', True) and value is None:
-                raise ValueError(f"Parameter '{name}' must not be null.")
-            if param.get('items', False):
-                for v in value:
-                    if param.get('items').get('minLength', 0) > len(v):
-                        raise ValueError(f"Parameter '{name}' must be at least {param['items']['minLength']} characters long.")
-                    if param.get('items').get('maxLength', 0) < len(v):
-                        raise ValueError(f"Parameter '{name}' must be at most {param['items']['maxLength']} characters long.")
-
+    @classmethod
+    def _validate_post_parameters(cls, name, value, spec):
+        for param_name, param_spec in spec.items():
+            if param_name == name:
+                cls._validate_parameter(name, value, param_spec)
+                return {
+                    'name': name,
+                    'in': param_spec.get('in', 'query'),
+                    'value': value,
+                    'required': param_spec.get('required', False),
+                }
+        raise ValueError(f"Parameter '{name}' not found in specification.")
 
 
 class SpecificationHostError(Exception):

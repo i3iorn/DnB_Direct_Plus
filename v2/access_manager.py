@@ -21,10 +21,14 @@ class AccessManager:
         self.flags = flags
         self.endpoints = endpoints
         self.connection_is_valid = False
-        self._validate_connection()
+
+        if not self.flags.get('SKIP_ENTITLEMENT_CHECK', False):
+            self._validate_connection()
 
     def _validate_connection(self):
         entitlements = self.get_entitlements()
+        if entitlements.get('error', False):
+            raise NoEndpointException("Session is not entitled to the entitlement endpoint.")
 
         self._validate_subscriber_type(entitlements)
         self._validate_contract_type(entitlements)
@@ -76,3 +80,12 @@ class AccessManager:
         request = DirectPlusRequest(self.session, self.endpoints.get('GET entitlements'), self)
         response = request.send()
         return response.json()
+
+    def is_entitled(self, endpoint_name):
+        if endpoint_name not in self.endpoints:
+            raise NoEndpointException(f"Endpoint '{endpoint_name}' does not exist.")
+
+        if not self.connection_is_valid:
+            self._validate_connection()
+
+        return self.endpoints.get(endpoint_name).is_entitled(self.get_entitlements())

@@ -50,6 +50,10 @@ class DirectPlusSession(requests.Session):
             self.access_token, self.access_token_expires = self._get_access_token(self.key_64)
             self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")
 
+        self.log.debug(f"Requesting {url}")
+        self.log.debug(f"Headers: {self.headers}")
+        self.log.debug(f"Parameters: {kwargs.keys()}")
+
         return super().get(url, **kwargs)
 
     def post(self, url, data='', **kwargs):
@@ -57,4 +61,8 @@ class DirectPlusSession(requests.Session):
             self.access_token, self.access_token_expires = self._get_access_token(self.key_64)
             self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")
 
-        return super().post(url, **kwargs)
+        return super().post(url, timeout=10, **kwargs)
+
+    def refresh(self):
+        self.access_token, self.access_token_expires = self._get_access_token(self.key_64)
+        self.log.debug(f"Access token expires in {self.access_token_expires - time()} seconds.")

@@ -1,13 +1,21 @@
 import base64
 import json
 import logging
+import math
+import time
 from pathlib import Path
+
+from requests import HTTPError
 
 # Import only the necessary exceptions from exceptions module
 from v2.access_manager import AccessManager
 from v2.endpoints import EndpointFactory, Endpoint
-from v2.request import DirectPlusRequest
+from v2.request import DirectPlusRequest, EmptySearchException
 from v2.session import DirectPlusSession
+
+
+class SearchCandidateCountException(Exception):
+    pass
 
 
 class DirectPlus:
@@ -72,13 +80,13 @@ class DirectPlus:
         :param duns:
         :return:
         """
-        return self._call_endpoint(
+        return self.call(
             'dataBlocks',
             dunsNumber=duns,
             blockIDs=blockIDs
         ).json()
 
-    def _call_endpoint(self, endpoint_id, **kwargs):
+    def call(self, endpoint_id, **kwargs):
         """
         Calls an endpoint by id.
 
@@ -86,7 +94,7 @@ class DirectPlus:
         :param kwargs:
         :return:
         """
-        self.log.debug(f"Calling endpoint {endpoint_id} with kwargs {kwargs}")
+        # self.log.debug(f"Calling endpoint {endpoint_id} with kwargs {kwargs.keys()}")
         if endpoint_id not in self.endpoints.keys():
             end_key = [end for end in self.endpoints.keys() if end.split(' ')[1] == endpoint_id]
             if len(end_key) != 1:
@@ -122,7 +130,7 @@ class DirectPlus:
                 }
             }}
 
-        return self._call_endpoint('POST multiProcessJobSubmissionv2', **parameters)
+        return self.call('POST multiProcessJobSubmissionv2', **parameters)
 
     def check_endpoint_access(self, endpoint):
         """
@@ -141,7 +149,7 @@ class DirectPlus:
         :param duns:
         :return:
         """
-        return self._call_endpoint('familyTreeUpward', duns=duns).json()
+        return self.call('familyTreeUpward', duns=duns).json()
 
     def full_family_tree(self, duns):
         """
@@ -150,13 +158,13 @@ class DirectPlus:
         :param duns:
         :return:
         """
-        return self._call_endpoint('familyTreeFull', duns=duns).json()
+        return self.call('familyTreeFull', duns=duns).json()
 
-    def search_by_criteria(self, **kwargs):
+    def get_industry_codes(self, code):
         """
-        Returns a list of duns numbers matching the given criteria.
+        Returns a list of industry codes for a given code.
 
-        :param kwargs:
+        :param code:
         :return:
         """
-        return self._call_endpoint('searchCriteria', **kwargs).json()
+        return self.call('refdataCodes', id=code).json()

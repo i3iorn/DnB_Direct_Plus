@@ -40,3 +40,7 @@ class ProductStatusException(Exception):
 
 class KeyTypeException(Exception):
     pass
+
+
+class EntitlementAccessException(Exception):
+    pass
