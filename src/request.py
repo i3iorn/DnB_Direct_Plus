@@ -1,26 +1,16 @@
-import json
 import logging
-import time
 
 import requests
 from typing import TYPE_CHECKING
 
 from requests import HTTPError
 
-from v2.exceptions import EntitlementAccessException
-from v2.endpoints import Endpoint
-from v2.session import DirectPlusSession
+from src.endpoints import Endpoint
+from src.error_handler import ErrorHandler
+from src.session import DirectPlusSession
 
 if TYPE_CHECKING:
-    from v2.access_manager import AccessManager
-
-
-class RetryException(Exception):
-    pass
-
-
-class EmptySearchException(Exception):
-    pass
+    from src.access_manager import AccessManager
 
 
 class DirectPlusRequest:
@@ -38,7 +28,7 @@ class DirectPlusRequest:
         for key, value in kwargs.items():
             self.endpoint.add_parameter(key, value)
 
-    def send(self):
+    def send(self) -> requests.Response:
         self.log.debug(f"Sending {self.endpoint.method} request to {self.endpoint.url}")
         method_function = getattr(self.session, self.endpoint.method.lower())
         method_parameters = {'url': self.endpoint.url()}
@@ -47,12 +37,16 @@ class DirectPlusRequest:
         elif self.endpoint.method == 'GET':
             method_parameters['params'] = self.endpoint.query_params()
 
+        self.log.debug(f"Request parameters: {method_parameters.keys()}")
+
         response = method_function(**method_parameters)
-        self.log.debug(f"Response: {response.status_code}")
+        eh = ErrorHandler(response)
+        if eh.has_error():
+            eh.handle_error()
 
         self.store_response(response)
         return response
 
-    def store_response(self, response):
+    def store_response(self, response) -> None:
         pass
 

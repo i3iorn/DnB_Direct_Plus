@@ -1,16 +1,10 @@
-import json
-import math
+import csv
 from pathlib import Path
+from time import perf_counter
 
-from v2 import API_CREDENTIALS
-from v2.direct_plus import DirectPlus
-from v2.search_criteria import SearchCriteriaManager
-
-# Constants
-REFERENCE_DATA_ID = 3599
-COUNTRY_ISO_ALPHA2_CODE = 'US'
-POSTAL_CODE = '77024'
-CHUNK_SIZE_MODIFIER = 10
+from src import API_CREDENTIALS
+from src.direct_plus import DirectPlus
+from src.transformer import Transformer
 
 # Initialize Direct+ API
 dp = DirectPlus(
@@ -20,26 +14,17 @@ dp = DirectPlus(
     'PRODUCTION'
 )
 
-refs = dp.call(
-    'refdataCodes',
-    id=REFERENCE_DATA_ID
-).json()
-codes = [ref.get('code') for ref in refs.get('codeTables')[0].get('codeLists')]
+results = []
+duns_list = ['118998879', '006990569', '078610275']
+for duns in duns_list:
+    result: dict = dp.enrich_duns(
+            duns=duns,
+            blockIDs='companyinfo_L2_v1,principalscontacts_L1_v2'
+    ).get('organization', {})
 
+    results.append(result)
 
-scg = SearchCriteriaManager(
-    dp,
-    countryISOAlpha2Code=COUNTRY_ISO_ALPHA2_CODE,
-    postalCode=POSTAL_CODE,
-    isOutOfBusiness=False,
-    pageNumber=20,
-    pageSize=50,
-    industryCodes=[
-        {
-            'code': codes,
-            'typeDnbCode': 3599
-        }
-    ],
-)
+data_processor = Transformer(results)
+data_processor.export_to_csv(f"results.csv", overwrite=True)
 
-print(scg.get_hits())
+# print(json.dumps(dp.call('elifft', duns='118998879', productId='elifft', versionId='v1').json(), indent=4))

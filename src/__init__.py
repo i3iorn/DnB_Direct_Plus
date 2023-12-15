@@ -1,8 +1,7 @@
-import json
 import yaml
-import logging.config
 import os
-from pathlib import Path
+
+from src.custom_logging import logging_setup
 
 current_dir = os.getcwd()
 
@@ -13,10 +12,7 @@ while not os.path.isfile(os.path.join(current_dir, 'README.md')):
 
 project_root = current_dir
 
-with open(Path(f"{project_root}/v2/log.json"), "r", encoding="UTF8") as f:
-    logger_config = json.load(f)
-
-logging.config.dictConfig(logger_config)
+logging_setup()
 
 with open(f'{project_root}/environment.yaml', 'r') as stream:
     config = yaml.safe_load(stream)
