@@ -20,7 +20,10 @@ class ArrayAligner:
         elif not isinstance(data, list):
             raise TypeError("Data must be a list of dictionaries.")
         elif not all(isinstance(d, dict) for d in data):
-            raise TypeError("Data must be a list of dictionaries.")
+            for i, d in enumerate(data):
+                if not isinstance(d, dict):
+                    raise TypeError(f"Data[{i}] must be a dictionary. ({type(d)})")
+            raise TypeError(f"Data must be a list of dictionaries.")
 
         # Get the union of keys from all dictionaries
         keys = set().union(*(d.keys() for d in data))

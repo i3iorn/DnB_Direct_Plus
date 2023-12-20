@@ -204,7 +204,8 @@ class Flattener:
         :param depth: Current depth of flattening.
         :return: None
         """
-        if not json_dict:
+        if json_dict is None:
+            json_dict = ""
             return
 
         try:

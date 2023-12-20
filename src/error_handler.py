@@ -1,7 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
 
-from src.exceptions import RequestPayloadException, AuthorizationError, DunsException
+from src.exceptions import RequestPayloadException, AuthorizationError, DunsException, MatchException
 
 if TYPE_CHECKING:
     from requests import Response
@@ -66,14 +66,21 @@ class ErrorHandler:
         raise ValueError(f"{self.reason}: {self.response.json().get('error', {})}")
 
     def handle_400(self) -> None:
+        self.log.error(self.reason)
+        self.log.error(f"Status code: {self.status_code}")
+        self.log.error(f"Method: {self.response.request.method}")
+        self.log.error(f"URL: {self.response.request.url}")
+        self.log.error(f"Body: {self.response.request.body}")
         raise RequestPayloadException(f"{self.reason}")
 
     def handle_401(self) -> None:
         raise AuthorizationError(f"{self.reason}")
 
     def handle_404(self) -> None:
-        if self.dnb_error_code == '10001':
+        if self.dnb_error_code in ('10001', '40105'):
             raise DunsException(self.dnb_error_message)
+        elif self.dnb_error_code == '20505':
+            raise MatchException(self.dnb_error_message)
         raise ValueError(f"{self.reason}: {self.response.json().get('error', {})}")
 
     def handle_410(self) -> None:

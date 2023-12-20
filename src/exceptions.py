@@ -91,3 +91,11 @@ class FlattenerError(Exception):
 
 class CSVExporterError(RuntimeError):
     pass
+
+
+class MatchException(DirectPlusException):
+    pass
+
+
+class XLSXExportError(RuntimeError):
+    pass

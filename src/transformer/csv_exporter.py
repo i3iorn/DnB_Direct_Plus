@@ -6,6 +6,11 @@ from src.exceptions import CSVExporterError
 
 
 class CSVExporter:
+    """
+    Exports a list of dictionaries to a CSV file. If include_headers is True, the first row of the CSV file will
+    contain the keys of the dictionaries. If include_headers is False, the first row of the CSV file will contain
+    the values of the first dictionary.
+    """
     @staticmethod
     def _check_and_create_directory(file_path: Path, create_parent: bool) -> None:
         if not file_path.parent.exists():

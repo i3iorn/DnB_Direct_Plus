@@ -1,5 +1,6 @@
 import logging
 import logging.config
+from pathlib import Path
 
 
 def add_log_levels():
@@ -88,7 +89,7 @@ dictconfig = {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "custom_formatter",
-            "filename": "logs/application.log",
+            "filename": f"{Path(__file__).parent.parent}/logs/application.log",
             "backupCount": 1,
             "maxBytes": 1048576,
             "encoding": "UTF8"

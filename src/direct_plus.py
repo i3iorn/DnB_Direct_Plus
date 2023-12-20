@@ -234,7 +234,7 @@ class DirectPlus:
         :return:
         """
         score_cutoff = kwargs.pop('confidenceLowerLevelThresholdValue', 8)
-        return self.call('IDRCleanseMatch', **kwargs).json()
+        return self.call('IDRCleanseMatch', **kwargs)
 
     @log_args
     def get_company_info(self, **parameters) -> requests.Response:
